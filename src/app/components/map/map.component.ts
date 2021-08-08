@@ -1,5 +1,6 @@
 import { AgmMap, MapsAPILoader } from '@agm/core';
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { EartQuakeParameters } from 'src/app/models/eartQuakeData.model';
 import { PlacesType } from 'src/app/models/placesType.model';
 import { ApiService } from 'src/app/services/api.service';
@@ -26,7 +27,11 @@ export class MapComponent implements OnInit {
       });
     }
   }
-  constructor(public mapService: MapService, private ngZone: NgZone, private apiServcice: ApiService, private mapsAPILoader: MapsAPILoader) { }
+  constructor(public mapService: MapService, 
+    private ngZone: NgZone, 
+    private apiServcice: ApiService, 
+    private mapsAPILoader: MapsAPILoader,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
     this.mapsAPILoader.load().then(() => {
@@ -37,8 +42,11 @@ export class MapComponent implements OnInit {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
               console.log(location);
+              this.spinner.hide();
               if(types.some(type => type.isVisible === true)) {
                 this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
+              } else {
+                this.zoom = 10;
               }
               // this.getHazzardInfo();
             });
