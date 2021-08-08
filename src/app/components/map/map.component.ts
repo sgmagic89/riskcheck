@@ -42,11 +42,16 @@ export class MapComponent implements OnInit {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
               console.log(location);
-              this.spinner.hide();
               if(types.some(type => type.isVisible === true)) {
                 this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
+                setTimeout(() => {
+                  this.spinner.hide();
+                }, 1000)
               } else {
-                this.zoom = 10;
+                this.zoom = 14;
+                setTimeout(() => {
+                  this.spinner.hide();
+                }, 1000)
               }
               // this.getHazzardInfo();
             });
@@ -80,7 +85,9 @@ export class MapComponent implements OnInit {
           }
           this.palcesService.nearbySearch(query,
           (results: any, status: any, pagination: any) => {
-              if (status !== 'OK') return;
+              if (status !== 'OK') {
+                return;
+              }
               this.createMarkers(results, type);
               console.log(results)
               if(pagination.hasNextPage) {
