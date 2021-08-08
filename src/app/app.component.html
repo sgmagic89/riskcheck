@@ -1,9 +1,8 @@
-<p-menubar [model]="items">
-  <ng-template pTemplate="start">
-    <img class="logo" src="assets/logo.png"/>
-  </ng-template>
-  <ng-template pTemplate="end">
-    <button pButton label="Logout" icon="pi pi-power-off"></button>
-  </ng-template>
-</p-menubar>
+<mat-toolbar color="primary">
+  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <img src="assets/logo.png" class="logo"/>
+  <span>Risk Check</span>
+</mat-toolbar>
 <router-outlet></router-outlet>

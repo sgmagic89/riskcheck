@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { MenuItem } from 'primeng/api';
-
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -8,7 +6,6 @@ import { MenuItem } from 'primeng/api';
 })
 export class AppComponent implements OnInit {
   title = 'RiskCheck';
-  items: MenuItem[] = [];
 
   ngOnInit() {
     
