@@ -9,6 +9,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
+import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
+import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 @NgModule({
   imports: [
     CommonModule,
@@ -23,7 +25,9 @@ import { HttpClientModule } from '@angular/common/http';
     FlexLayoutModule,
     MatCardModule,
     MatInputModule,
-    HttpClientModule 
+    HttpClientModule,
+    AgmSnazzyInfoWindowModule,
+    MatSlideToggleModule
   ],
   declarations: []
 })

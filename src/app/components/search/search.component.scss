@@ -5,3 +5,10 @@
 :host::ng-deep .mat-form-field-flex {
     border: grey 1px solid;
 }
+
+.placesTypes {
+    display: flex;
+    .place {
+        margin-right: 30px;
+    }
+}

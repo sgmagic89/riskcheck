@@ -35,7 +35,8 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/snazzy-info-window/dist/snazzy-info-window.css"
             ],
             "scripts": []
           },
