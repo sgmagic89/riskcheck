@@ -1,11 +1,16 @@
 <div fxFlex>
-  <agm-map 
-  #AgmMap
-  [latitude]="latitude" 
-  [longitude]="longitude" 
-  [zoom]="zoom" >
-    <agm-marker 
-    [latitude]="latitude" 
-    [longitude]="longitude"></agm-marker>
+  <agm-map #AgmMap [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
+    <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+      <ng-container *ngFor="let placeTypeData of mapService.placeTypeDataSet$ | async">
+        <ng-container *ngFor="let place of placeTypeData.data">
+          <agm-marker [visible]="placeTypeData.placeType.isVisible" [iconUrl]="place.icon" [latitude]="place.latitude" [longitude]="place.longitude">
+            <agm-snazzy-info-window [maxWidth]="200" [closeWhenOthersOpen]="true">
+              <ng-template>
+                {{place.name}}
+              </ng-template>
+            </agm-snazzy-info-window>
+          </agm-marker>
+        </ng-container>
+      </ng-container>
   </agm-map>
 </div>
