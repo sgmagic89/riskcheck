@@ -58,11 +58,11 @@ updatePlaceTypeData(placeType: PlacesType, data: any) {
 }
 
 createDefaultPlaceTypes() {
-  let placeType = new PlacesType('Hospital',true,'hospital');
+  let placeType = new PlacesType('Hospital',false,'hospital');
   this.setPlaceType(placeType);
-  placeType = new PlacesType('Police Station',true,'police',undefined,5000);
+  placeType = new PlacesType('Police Station',false,'police',undefined);
   this.setPlaceType(placeType);
-  placeType = new PlacesType('Fire Station',true,undefined,'fire station',5000);
+  placeType = new PlacesType('Fire Station',false,undefined,'fire station');
   this.setPlaceType(placeType);
 }
 

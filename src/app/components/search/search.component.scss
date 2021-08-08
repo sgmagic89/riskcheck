@@ -8,7 +8,8 @@
 
 .placesTypes {
     display: flex;
+    flex-wrap: wrap;
     .place {
-        margin-right: 30px;
+        margin: 0px 30px 10px 0px;
     }
 }
