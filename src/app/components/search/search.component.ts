@@ -12,14 +12,11 @@ export class SearchComponent implements OnInit {
   public searchElementRef: ElementRef = <ElementRef>{};
   private geoCoder: any = {};
   public placeTypes: PlacesType[] = [];
-  constructor(private mapService: MapService, 
+  constructor(public mapService: MapService, 
     private mapsAPILoader: MapsAPILoader,
     private ngZone: NgZone) { }
 
   ngOnInit() {
-    this.mapService.placeTypes$.subscribe(types => {
-      this.placeTypes = types;
-    });
     this.mapService.createDefaultPlaceTypes();
 
     this.mapsAPILoader.load().then(() => {
@@ -51,11 +48,5 @@ export class SearchComponent implements OnInit {
       });
     }
   }
-
-  tooglePlaceType(event: any, type: PlacesType) {
-    console.log(event.checked, type);
-    this.mapService.updatePlaceTypeVisibility(type.displayName, event.checked);
-  }
-
 
 }

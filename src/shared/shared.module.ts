@@ -11,6 +11,10 @@ import {MatInputModule} from '@angular/material/input';
 import { HttpClientModule } from '@angular/common/http';
 import { AgmSnazzyInfoWindowModule } from '@agm/snazzy-info-window';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   imports: [
     CommonModule,
@@ -27,7 +31,11 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatInputModule,
     HttpClientModule,
     AgmSnazzyInfoWindowModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatTooltipModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatDialogModule
   ],
   declarations: []
 })

@@ -9,7 +9,7 @@ import { PlaceTypeData } from '../models/placeTypeData.model';
 })
 export class MapService {
 
-private _location = new Subject<Location>();
+private _location = new BehaviorSubject<Location>(<Location>{});
 location$ = this._location.asObservable();
 
 private _placeTypes = new BehaviorSubject<PlacesType[]>([]);
@@ -25,7 +25,7 @@ setLocation(location: Location) {
   this._location.next(location);
 }
 
-setPlaceType(placeType: PlacesType) {
+addPlaceType(placeType: PlacesType) {
   const placeTypes = this._placeTypes.getValue();
   const updatedValue = [...placeTypes, placeType];
   this._placeTypes.next(updatedValue);
@@ -59,11 +59,11 @@ updatePlaceTypeData(placeType: PlacesType, data: any) {
 
 createDefaultPlaceTypes() {
   let placeType = new PlacesType('Hospital',false,'hospital');
-  this.setPlaceType(placeType);
+  this.addPlaceType(placeType);
   placeType = new PlacesType('Police Station',false,'police',undefined);
-  this.setPlaceType(placeType);
+  this.addPlaceType(placeType);
   placeType = new PlacesType('Fire Station',false,undefined,'fire station');
-  this.setPlaceType(placeType);
+  this.addPlaceType(placeType);
 }
 
 emptyPlaceTypeDataSet() {

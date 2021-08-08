@@ -29,17 +29,18 @@ export class MapComponent implements OnInit {
   constructor(public mapService: MapService, private ngZone: NgZone, private apiServcice: ApiService, private mapsAPILoader: MapsAPILoader) { }
 
   ngOnInit() {
+    this.mapsAPILoader.load().then(() => {
     this.mapService.placeTypes$.subscribe(types => {
-      this.mapsAPILoader.load().then(() => {
         this.mapService.location$.subscribe(location => {
-          this.ngZone.run(() => {
-            this.latitude = location.latitude;
-            this.longitude = location.longitude;
-            console.log(location);
-            this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
-            // this.getHazzardInfo();
-            this.zoom = 15;
-          });
+          if(location.latitude && location.longitude) {
+            this.ngZone.run(() => {
+              this.latitude = location.latitude;
+              this.longitude = location.longitude;
+              console.log(location);
+              this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
+              // this.getHazzardInfo();
+            });
+          }
         });
     });
     });

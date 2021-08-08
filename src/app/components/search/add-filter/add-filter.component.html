@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Add Filter</h1>
+<div class="form">
+  <div mat-dialog-content>
+    <form [formGroup]="filterForm" class="fields">
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> Filter Name
+        </mat-label>
+        <input matInput formControlName="filterName" required>
+        <mat-error *ngIf="filterForm.controls.filterName.touched && filterForm.controls.filterName.invalid">
+          <span *ngIf="filterForm.controls.filterName.hasError('required')">This field is mandatory.</span>
+        </mat-error>
+      </mat-form-field>
+      <mat-form-field class="form-field" appearance="outline">
+        <mat-label> Filter Keyword
+        </mat-label>
+        <input matInput formControlName="filterKeyword" required>
+        <mat-error *ngIf="filterForm.controls.filterKeyword.touched && filterForm.controls.filterKeyword.invalid">
+          <span *ngIf="filterForm.controls.filterKeyword.hasError('required')">This field is mandatory.</span>
+        </mat-error>
+      </mat-form-field>    
+    </form>
+  </div>
+  <div mat-dialog-actions fxLayoutAlign="end">
+    <button mat-raised-button color="secondary" (click)="cancel()">Cancel</button>
+    <button mat-raised-button color="primary" (click)="submit()">Add</button>
+  </div>
+</div>
+
