@@ -1,6 +1,4 @@
 import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core';
-import {Location} from '@angular-material-extensions/google-maps-autocomplete';
-import PlaceResult = google.maps.places.PlaceResult;
 import { MapService } from 'src/app/services/map.service';
 import { MapsAPILoader } from '@agm/core';
 @Component({

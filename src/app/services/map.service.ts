@@ -15,4 +15,8 @@ setLocation(location: Location) {
   this._location.next(location);
 }
 
+getEarthQuakeData() {
+  
+}
+
 }
