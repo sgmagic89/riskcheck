@@ -3,6 +3,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import {Location} from '@angular-material-extensions/google-maps-autocomplete';
 import { PlacesType } from '../models/placesType.model';
 import { PlaceTypeData } from '../models/placeTypeData.model';
+import { LocalstorageService } from './localstorage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ private placeTypeDataSet: PlaceTypeData[] = [];
 private _placeTypeDataSet = new Subject<PlaceTypeData[]>();
 placeTypeDataSet$ = this._placeTypeDataSet.asObservable();
 
-constructor() { }
+constructor(private storageService: LocalstorageService) { }
 
 setLocation(location: Location) {
   this._location.next(location);
@@ -27,8 +28,10 @@ setLocation(location: Location) {
 
 addPlaceType(placeType: PlacesType) {
   const placeTypes = this._placeTypes.getValue();
-  const updatedValue = [...placeTypes, placeType];
-  this._placeTypes.next(updatedValue);
+  const updatedpPaceTypes = [...placeTypes, placeType];
+  this._placeTypes.next(updatedpPaceTypes);
+  this.storageService.removeItem('filters');
+  this.storageService.setItem('filters', updatedpPaceTypes);
 }
 
 updatePlaceTypeVisibility(placeType: string, visible: boolean) {
@@ -39,6 +42,8 @@ updatePlaceTypeVisibility(placeType: string, visible: boolean) {
     }
   });
   this._placeTypes.next(placeTypes);
+  this.storageService.removeItem('filters');
+  this.storageService.setItem('filters', placeTypes);
 }
 
 updatePlaceTypeData(placeType: PlacesType, data: any) {
@@ -58,12 +63,21 @@ updatePlaceTypeData(placeType: PlacesType, data: any) {
 }
 
 createDefaultPlaceTypes() {
-  let placeType = new PlacesType('Hospital',false,'hospital');
-  this.addPlaceType(placeType);
-  placeType = new PlacesType('Police Station',false,'police',undefined);
-  this.addPlaceType(placeType);
-  placeType = new PlacesType('Fire Station',false,undefined,'fire station');
-  this.addPlaceType(placeType);
+  const filters: any[] = this.storageService.getItem('filters')
+  if(!filters) {
+    let placeType = new PlacesType('Hospital',false,'hospital');
+    this.addPlaceType(placeType);
+    placeType = new PlacesType('Police Station',false,'police',undefined);
+    this.addPlaceType(placeType);
+    placeType = new PlacesType('Fire Station',false,undefined,'fire station');
+    this.addPlaceType(placeType);
+    this.storageService.setItem('filters', this._placeTypes.getValue())
+  } else {
+    filters.forEach(filter => {
+      this.addPlaceType(filter);
+    })
+  }
+  
 }
 
 emptyPlaceTypeDataSet() {
