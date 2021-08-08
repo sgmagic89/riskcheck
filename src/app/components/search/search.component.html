@@ -1,5 +1,6 @@
-<mat-google-maps-autocomplete
-                              type="address"
-                              (onAutocompleteSelected)="onAutocompleteSelected($event)"
-                              (onLocationSelected)="onLocationSelected($event)">
-</mat-google-maps-autocomplete>
+<form class="form">
+  <mat-form-field class="full-width" appearance="fill">
+    <mat-label>Let's get strted by locating the Property</mat-label>
+    <input matInput value="" class="form-control" (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+  </mat-form-field>
+</form>

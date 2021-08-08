@@ -7,6 +7,7 @@ import {MatCommonModule} from '@angular/material/core';
 import {MatGoogleMapsAutocompleteModule} from '@angular-material-extensions/google-maps-autocomplete';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,7 +20,8 @@ import {MatCardModule} from '@angular/material/card';
     MatCommonModule,
     MatGoogleMapsAutocompleteModule,
     FlexLayoutModule,
-    MatCardModule
+    MatCardModule,
+    MatInputModule
   ],
   declarations: []
 })

@@ -1,5 +1,5 @@
 import { AgmMap} from '@agm/core';
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { MapService } from 'src/app/services/map.service';
 
 @Component({
@@ -12,13 +12,17 @@ export class MapComponent implements OnInit {
   longitude: number = 0;
   zoom: number = 5;
   @ViewChild('AgmMap') agmMap: AgmMap = <AgmMap>{};
-  constructor(private mapService: MapService) { }
+  constructor(private mapService: MapService, private ngZone: NgZone) { }
 
   ngOnInit() {
     this.mapService.location$.subscribe(location => {
-      this.latitude = location.latitude;
-      this.longitude = location.longitude;
-    })
+      this.ngZone.run(() => {
+        this.latitude = location.latitude;
+        this.longitude = location.longitude;
+        this.zoom = 15;
+      });
+    });
   }
+  
 
 }

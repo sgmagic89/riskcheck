@@ -1,0 +1,7 @@
+.full-width {
+    width: 100%;
+}
+
+:host::ng-deep .mat-form-field-flex {
+    border: grey 1px solid;
+}
