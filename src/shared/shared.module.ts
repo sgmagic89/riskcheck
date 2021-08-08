@@ -16,6 +16,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import {MatDialogModule} from '@angular/material/dialog';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import {MatSidenavModule} from '@angular/material/sidenav';
+import {MatTableModule} from '@angular/material/table';
 @NgModule({
   imports: [
     CommonModule,
@@ -37,7 +39,9 @@ import { NgxSpinnerModule } from 'ngx-spinner';
     MatFormFieldModule,
     ReactiveFormsModule,
     MatDialogModule,
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    MatSidenavModule,
+    MatTableModule
   ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   declarations: []

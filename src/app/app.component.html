@@ -1,8 +1,16 @@
+
 <mat-toolbar color="primary">
-  <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+  <button mat-icon-button class="icon" (click)="drawer.toggle()" aria-label="menu-icon">
     <mat-icon>menu</mat-icon>
   </button>
   <img src="assets/logo.png" class="logo"/>
   <span>Risk Check</span>
 </mat-toolbar>
-<router-outlet></router-outlet>
+<mat-drawer-container class="base-container" autosize>
+  <mat-drawer #drawer class="sidenav" mode="side">
+    <app-sinde-nav></app-sinde-nav>
+  </mat-drawer>
+
+  <router-outlet></router-outlet>
+
+</mat-drawer-container>

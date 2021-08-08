@@ -4,3 +4,13 @@
         margin: 0px 10px 5px 10px;
 }
 
+.base-container {
+        height: 100%;
+        width: 100%;
+        .sidenav {
+                display: flex;
+                height: 100%;
+                min-width: 250px;
+                background-color: #3F51B5;
+        }
+}

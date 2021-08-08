@@ -34,6 +34,15 @@ addPlaceType(placeType: PlacesType) {
   this.storageService.setItem('filters', updatedpPaceTypes);
 }
 
+deletePlaceType(placeType: PlacesType) {
+  const placeTypes = this._placeTypes.getValue();
+  const updatedpPaceTypes = placeTypes.filter(filter => filter.displayName != placeType.displayName);
+  this._placeTypes.next(updatedpPaceTypes);
+  this.storageService.removeItem('filters');
+  this.storageService.setItem('filters', updatedpPaceTypes);
+}
+
+
 updatePlaceTypeVisibility(placeType: string, visible: boolean) {
   let placeTypes = this._placeTypes.getValue();
   placeTypes.forEach(type => {

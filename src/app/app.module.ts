@@ -11,6 +11,8 @@ import { MapComponent } from './components/map/map.component';
 import { SearchComponent } from './components/search/search.component';
 import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
 import { AddFilterComponent } from './components/search/add-filter/add-filter.component';
+import { SindeNavComponent } from './components/sinde-nav/sinde-nav.component';
+import { ManageFiltersComponent } from './components/search/manage-filters/manage-filters.component';
 
 @NgModule({
    declarations: [
@@ -19,7 +21,9 @@ import { AddFilterComponent } from './components/search/add-filter/add-filter.co
       MapComponent,
       SearchComponent,
       SearchFiltersComponent,
-      AddFilterComponent
+      AddFilterComponent,
+      SindeNavComponent,
+      ManageFiltersComponent
    ],
    imports: [
 	 BrowserModule,

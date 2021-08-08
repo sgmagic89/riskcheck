@@ -42,12 +42,11 @@ export class MapComponent implements OnInit {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
               console.log(location);
-              if(types.some(type => type.isVisible === true)) {
                 this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
                 setTimeout(() => {
                   this.spinner.hide();
-                }, 1000)
-              } else {
+                }, 1000);
+              if(!types.some(type => type.isVisible === true)) {
                 this.zoom = 14;
                 setTimeout(() => {
                   this.spinner.hide();
@@ -73,6 +72,7 @@ export class MapComponent implements OnInit {
   }
 
   getPlaces(types: PlacesType[], location: any) {
+    this.spinner.show();
     this.mapService.emptyPlaceTypeDataSet();
     this.palcesService = new google.maps.places.PlacesService(this.agmMap);
       for(let type of types) {
@@ -88,10 +88,12 @@ export class MapComponent implements OnInit {
               if (status !== 'OK') {
                 return;
               }
+              this.spinner.hide();
               this.createMarkers(results, type);
               console.log(results)
               if(pagination.hasNextPage) {
                 pagination.nextPage();
+                this.spinner.show();
               }
           });
         }

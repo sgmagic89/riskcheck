@@ -22,10 +22,7 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   openAddFilterForm() {
-    const dialogRef = this.dialog.open(AddFilterComponent);
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(AddFilterComponent);
   }
 
 }
