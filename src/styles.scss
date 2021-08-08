@@ -10,7 +10,11 @@ html, body {
     flex-direction: column;
   }
 
-  app-home, app-search, app-map, agm-map {
+  app-home, app-map, agm-map {
     height: 100%;
   }
-  
+
+  app-search {
+    width: 50%;
+    height: auto;
+  }

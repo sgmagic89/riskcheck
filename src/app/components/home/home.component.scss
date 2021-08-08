@@ -5,6 +5,9 @@
     height: 100%;
     .actions {
         flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .map {
         flex: 1;
