@@ -37,7 +37,9 @@ export class MapComponent implements OnInit {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
               console.log(location);
-              this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
+              if(types.some(type => type.isVisible === true)) {
+                this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
+              }
               // this.getHazzardInfo();
             });
           }
@@ -61,21 +63,23 @@ export class MapComponent implements OnInit {
     this.mapService.emptyPlaceTypeDataSet();
     this.palcesService = new google.maps.places.PlacesService(this.agmMap);
       for(let type of types) {
-        const query = {
-          location: location,
-          radius: type.radius,
-          type: [type.type? type.type : undefined],
-          keyword: [type.keyword? type.keyword : undefined]
+        if(type.isVisible) {
+          const query = {
+            location: location,
+            radius: type.radius,
+            type: [type.type? type.type : undefined],
+            keyword: [type.keyword? type.keyword : undefined]
+          }
+          this.palcesService.nearbySearch(query,
+          (results: any, status: any, pagination: any) => {
+              if (status !== 'OK') return;
+              this.createMarkers(results, type);
+              console.log(results)
+              if(pagination.hasNextPage) {
+                pagination.nextPage();
+              }
+          });
         }
-        this.palcesService.nearbySearch(query,
-        (results: any, status: any, pagination: any) => {
-            if (status !== 'OK') return;
-            this.createMarkers(results, type);
-            console.log(results)
-            if(pagination.hasNextPage) {
-              pagination.nextPage();
-            }
-        });
       }
   }
 
