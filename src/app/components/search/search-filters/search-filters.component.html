@@ -1,0 +1,13 @@
+<div class="placesTypes">
+  <ng-container *ngFor="let type of mapService.placeTypes$ | async">
+    <div class="place">
+      <mat-slide-toggle
+      color="primary"
+      [checked]="type.isVisible"
+      (change)="tooglePlaceType($event,type)">
+      {{type.displayName}}
+      </mat-slide-toggle>
+    </div>
+  </ng-container>
+  <mat-icon class="addFilter" matTooltip="Add Filter" (click)="openAddFilterForm()"  matTooltipPosition="right" color="primary">library_add</mat-icon>
+</div>

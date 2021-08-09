@@ -1,0 +1,52 @@
+:host {
+    overflow: hidden;
+}
+
+
+table {
+    width: 100%;
+}
+
+.mat-dialog-content {
+    padding: 10px 30px;
+    display: flex;
+    flex-direction: column;
+    max-height: 235px;
+}
+
+.actions {
+    .edit {
+        color: #3F51B5;
+        cursor: pointer;
+    }
+
+    .delete {
+        color: red;
+        cursor: pointer;
+    }
+}
+
+.addFilterButton {
+    margin-bottom: 10px;
+    margin-right: 5px;
+}
+
+.mainActions {
+    display: flex;
+    width: 100%;
+    flex-direction: row-reverse;
+}
+
+.actionDisabled {
+    color: grey !important;
+    pointer-events:none;
+}
+
+.heading {
+    display: flex;
+    justify-content: space-between;
+}
+
+.close {
+    cursor: pointer;
+}

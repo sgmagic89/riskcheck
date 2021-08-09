@@ -2,6 +2,7 @@ import { Component, ElementRef, NgZone, OnInit, ViewChild } from '@angular/core'
 import { MapService } from 'src/app/services/map.service';
 import { MapsAPILoader } from '@agm/core';
 import { PlacesType } from 'src/app/models/placesType.model';
+import { NgxSpinnerService } from 'ngx-spinner';
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -12,14 +13,12 @@ export class SearchComponent implements OnInit {
   public searchElementRef: ElementRef = <ElementRef>{};
   private geoCoder: any = {};
   public placeTypes: PlacesType[] = [];
-  constructor(private mapService: MapService, 
+  constructor(public mapService: MapService, 
     private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone) { }
+    private ngZone: NgZone,
+    private spinner: NgxSpinnerService) { }
 
   ngOnInit() {
-    this.mapService.placeTypes$.subscribe(types => {
-      this.placeTypes = types;
-    });
     this.mapService.createDefaultPlaceTypes();
 
     this.mapsAPILoader.load().then(() => {
@@ -28,6 +27,7 @@ export class SearchComponent implements OnInit {
 
       let autocomplete = new google.maps.places.Autocomplete(this.searchElementRef.nativeElement);
       autocomplete.addListener("place_changed", () => {
+        this.spinner.show();
         this.ngZone.run(() => {
           //get the place result
           let place: google.maps.places.PlaceResult = autocomplete.getPlace();
@@ -45,17 +45,15 @@ export class SearchComponent implements OnInit {
   }
 
   private setCurrentLocation() {
+    this.spinner.show();
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.mapService.setLocation({latitude: position.coords.latitude, longitude: position.coords.longitude});
+      }, (err) => {
+        this.spinner.hide();
       });
     }
   }
-
-  tooglePlaceType(event: any, type: PlacesType) {
-    console.log(event.checked, type);
-    this.mapService.updatePlaceTypeVisibility(type.displayName, event.checked);
-  }
-
+  
 
 }

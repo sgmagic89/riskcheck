@@ -4,15 +4,4 @@
     <input matInput value="" class="form-control" (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
   </mat-form-field>
 </form>
-<div class="placesTypes">
-  <ng-container *ngFor="let type of placeTypes">
-    <div class="place">
-      <mat-slide-toggle
-      color="primary"
-      [checked]="type.isVisible"
-      (change)="tooglePlaceType($event,type)">
-      {{type.displayName}}
-      </mat-slide-toggle>
-    </div>
-  </ng-container>
-</div>
+<app-search-filters></app-search-filters>
