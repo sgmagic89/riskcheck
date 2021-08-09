@@ -80,7 +80,6 @@ export class MapComponent implements OnInit {
           const query = {
             location: location,
             radius: type.radius,
-            type: [type.type],
             keyword: [type.keyword]
           }
           this.palcesService.nearbySearch(query,

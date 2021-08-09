@@ -27,7 +27,7 @@ export class AddFilterComponent implements OnInit {
     if (!this.filterForm.valid) {
       return;
     }
-    const placeType = new PlacesType(this.filterForm.value.filterName,true,undefined,this.filterForm.value.filterKeyword,true);
+    const placeType = new PlacesType(this.filterForm.value.filterName,this.filterForm.value.filterKeyword);
     this.mapService.addPlaceType(placeType);
     this.dialogRef.close();
   }
