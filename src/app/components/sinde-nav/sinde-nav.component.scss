@@ -2,12 +2,12 @@
     color: white;
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
     .navItem {
         display: flex;
         align-items: center;
         justify-content: space-between;
         padding: 10px 30px;
+        background-color: #13227485;
         .navItemText {
             font-size: 14px;
             font-weight: bold;

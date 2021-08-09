@@ -1,13 +1,13 @@
 
 <mat-toolbar color="primary">
-  <button mat-icon-button class="icon" (click)="drawer.toggle()" aria-label="menu-icon">
+  <button mat-icon-button class="icon" (click)="toogleNav()" aria-label="menu-icon">
     <mat-icon>menu</mat-icon>
   </button>
   <img src="assets/logo.png" class="logo"/>
   <span>Risk Check</span>
 </mat-toolbar>
-<mat-drawer-container class="base-container" autosize>
-  <mat-drawer #drawer class="sidenav" mode="side">
+<mat-drawer-container (backdropClick)="closeNav()" class="base-container" autosize >
+  <mat-drawer #drawer class="sidenav" [opened]="navVisible" mode="over">
     <app-sinde-nav></app-sinde-nav>
   </mat-drawer>
 
