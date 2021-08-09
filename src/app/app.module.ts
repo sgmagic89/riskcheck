@@ -9,13 +9,21 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomeComponent } from './components/home/home.component';
 import { MapComponent } from './components/map/map.component';
 import { SearchComponent } from './components/search/search.component';
+import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
+import { AddFilterComponent } from './components/search/add-filter/add-filter.component';
+import { SindeNavComponent } from './components/sinde-nav/sinde-nav.component';
+import { ManageFiltersComponent } from './components/search/manage-filters/manage-filters.component';
 
 @NgModule({
    declarations: [
       AppComponent,
       HomeComponent,
       MapComponent,
-      SearchComponent
+      SearchComponent,
+      SearchFiltersComponent,
+      AddFilterComponent,
+      SindeNavComponent,
+      ManageFiltersComponent
    ],
    imports: [
 	 BrowserModule,
@@ -27,6 +35,7 @@ import { SearchComponent } from './components/search/search.component';
       libraries: ['places']
     })
 	],
+   entryComponents:[AddFilterComponent],
    providers: [],
    bootstrap: [
       AppComponent

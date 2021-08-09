@@ -1,0 +1,11 @@
+.placesTypes {
+    display: flex;
+    flex-wrap: wrap;
+    .place {
+        margin: 0px 30px 10px 0px;
+    }
+}
+
+.addFilter {
+    cursor: pointer;
+}
