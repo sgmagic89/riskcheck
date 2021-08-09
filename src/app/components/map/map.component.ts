@@ -41,7 +41,7 @@ export class MapComponent implements OnInit {
             this.ngZone.run(() => {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
-              console.log(location);
+              console.log('Location Coordinates', location);
                 this.getPlaces(types, {lat: location.latitude, lng: location.longitude});
                 setTimeout(() => {
                   this.spinner.hide();
@@ -52,7 +52,7 @@ export class MapComponent implements OnInit {
                   this.spinner.hide();
                 }, 1000)
               }
-              // this.getHazzardInfo();
+              this.getHazzardInfo();
             });
           }
         });
@@ -67,7 +67,7 @@ export class MapComponent implements OnInit {
         eartQuakeData.latitude = this.latitude;
         eartQuakeData.longitude = this.longitude;
         this.apiServcice.getEarthQuakeData(eartQuakeData).subscribe(result => {
-          console.log(result);
+          console.log('EarthQuake Data', result);
         })
   }
 
@@ -90,11 +90,11 @@ export class MapComponent implements OnInit {
               }
               this.spinner.hide();
               this.createMarkers(results, type);
-              console.log(results)
-              if(pagination.hasNextPage) {
-                pagination.nextPage();
-                this.spinner.show();
-              }
+              console.log(type.displayName ,results);
+              // if(pagination.hasNextPage) {
+              //   pagination.nextPage();
+              //   this.spinner.show();
+              // }
           });
         }
       }

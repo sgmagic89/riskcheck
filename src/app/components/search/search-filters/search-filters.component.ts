@@ -17,7 +17,6 @@ export class SearchFiltersComponent implements OnInit {
   }
 
   tooglePlaceType(event: any, type: PlacesType) {
-    console.log(event.checked, type);
     this.mapService.updatePlaceTypeVisibility(type.displayName, event.checked);
   }
 
