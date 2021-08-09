@@ -10,7 +10,7 @@ import { AddFilterComponent } from '../add-filter/add-filter.component';
   styleUrls: ['./manage-filters.component.scss']
 })
 export class ManageFiltersComponent implements OnInit {
-  displayedColumns: string[] = ['displayName', 'keyword', 'isVisible', 'radius', 'canDelete'];
+  displayedColumns: string[] = ['displayName', 'type', 'keyword', 'isVisible', 'radius', 'canDelete'];
   dataSource: PlacesType[] = [];
   constructor(private mapService: MapService, public dialog: MatDialog,     private dialogRef: MatDialogRef<ManageFiltersComponent>,) { }
 

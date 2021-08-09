@@ -74,11 +74,11 @@ updatePlaceTypeData(placeType: PlacesType, data: any) {
 createDefaultPlaceTypes() {
   const filters: any[] = this.storageService.getItem('filters')
   if(!filters) {
-    let placeType = new PlacesType('Hospital','hospital',false, false);
+    let placeType = new PlacesType('Hospital',false,'hospital');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Police Station','police', false, false);
+    placeType = new PlacesType('Police Station',false,'police');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Fire Station','fire station', false, false);
+    placeType = new PlacesType('Fire Station',false,undefined,'fire station');
     this.addPlaceType(placeType);
     this.storageService.setItem('filters', this._placeTypes.getValue())
   } else {
