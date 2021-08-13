@@ -1,9 +1,10 @@
 import { AgmMap, MapsAPILoader } from '@agm/core';
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { EartQuakeParameters } from 'src/app/models/eartQuakeData.model';
+import { EarthQuakeParameters } from 'src/app/models/eartQuakeData.model';
 import { PlacesType } from 'src/app/models/placesType.model';
 import { ApiService } from 'src/app/services/api.service';
+import { HazzardService } from 'src/app/services/hazzard.service';
 import { MapService } from 'src/app/services/map.service';
 
 @Component({
@@ -30,7 +31,6 @@ export class MapComponent implements OnInit {
   constructor(
     public mapService: MapService,
     private ngZone: NgZone,
-    private apiServcice: ApiService,
     private mapsAPILoader: MapsAPILoader,
     private spinner: NgxSpinnerService
   ) {}
@@ -57,22 +57,10 @@ export class MapComponent implements OnInit {
                   this.spinner.hide();
                 }, 1000);
               }
-              this.getHazzardInfo();
             });
           }
         });
       });
-    });
-  }
-
-  getHazzardInfo() {
-    let eartQuakeData = new EartQuakeParameters();
-    eartQuakeData.endtime = '2021-08-01';
-    eartQuakeData.starttime = '2010-08-01';
-    eartQuakeData.latitude = this.latitude;
-    eartQuakeData.longitude = this.longitude;
-    this.apiServcice.getEarthQuakeData(eartQuakeData).subscribe((result) => {
-      console.log('EarthQuake Data', result);
     });
   }
 

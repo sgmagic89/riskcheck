@@ -22,6 +22,8 @@ placeTypeDataSet$ = this._placeTypeDataSet.asObservable();
 
 constructor(private storageService: LocalstorageService) { }
 
+
+
 setLocation(location: Location) {
   this._location.next(location);
 }
