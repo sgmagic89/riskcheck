@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
-import { EarthQuakeData, EarthQuakeParameters } from '../models/eartQuakeData.model';
-import { ApiService } from './api.service';
+import { EarthQuakeParameters, EarthQuakeData } from 'src/app/models/eartQuakeData.model';
+import { ApiService } from '../dataServices/api.service';
+
 
 @Injectable({
   providedIn: 'root'

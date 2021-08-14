@@ -2,17 +2,16 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
 import {AgmCoreModule} from '@agm/core';
-
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './components/core/home/home.component';
 import { MapComponent } from './components/map/map.component';
 import { SearchComponent } from './components/search/search.component';
-import { SearchFiltersComponent } from './components/search/search-filters/search-filters.component';
-import { AddFilterComponent } from './components/search/add-filter/add-filter.component';
-import { SindeNavComponent } from './components/sinde-nav/sinde-nav.component';
-import { ManageFiltersComponent } from './components/search/manage-filters/manage-filters.component';
+import { SindeNavComponent } from './components/core/sinde-nav/sinde-nav.component';
+import { AddFilterComponent } from './components/filters/add-filter/add-filter.component';
+import { ManageFiltersComponent } from './components/filters/manage-filters/manage-filters.component';
+import { SearchFiltersComponent } from './components/filters/search-filters/search-filters.component';
 
 @NgModule({
    declarations: [

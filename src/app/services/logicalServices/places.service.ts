@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import {Location} from '@angular-material-extensions/google-maps-autocomplete';
-import { PlacesType } from '../models/placesType.model';
-import { PlaceTypeData } from '../models/placeTypeData.model';
-import { LocalstorageService } from './localstorage.service';
+import { ElementRef, NgZone } from '@angular/core';
+import { PlacesType } from '../../models/placesType.model';
+import { PlaceTypeData } from '../../models/placeTypeData.model';
+import { LocalstorageService } from '../dataServices/localstorage.service';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MapService {
-
-private _location = new BehaviorSubject<Location>(<Location>{});
-location$ = this._location.asObservable();
-
+export class PlacesService {
 private _placeTypes = new BehaviorSubject<PlacesType[]>([]);
 placeTypes$ = this._placeTypes.asObservable();
 
@@ -20,13 +17,11 @@ private placeTypeDataSet: PlaceTypeData[] = [];
 private _placeTypeDataSet = new Subject<PlaceTypeData[]>();
 placeTypeDataSet$ = this._placeTypeDataSet.asObservable();
 
-constructor(private storageService: LocalstorageService) { }
+constructor(private storageService: LocalstorageService, 
+  private spinner: NgxSpinnerService,
+  private ngZone: NgZone) { }
 
 
-
-setLocation(location: Location) {
-  this._location.next(location);
-}
 
 addPlaceType(placeType: PlacesType) {
   const placeTypes = this._placeTypes.getValue();

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ManageFiltersComponent } from '../search/manage-filters/manage-filters.component';
+import { ManageFiltersComponent } from '../../filters/manage-filters/manage-filters.component';
 
 @Component({
   selector: 'app-sinde-nav',
