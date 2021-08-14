@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { PlacesType } from 'src/app/models/placesType.model';
-import { MapService } from 'src/app/services/map.service';
+import { PlacesService } from 'src/app/services/logicalServices/places.service';
 import { AddFilterComponent } from '../add-filter/add-filter.component';
 
 @Component({
@@ -11,13 +11,13 @@ import { AddFilterComponent } from '../add-filter/add-filter.component';
 })
 export class SearchFiltersComponent implements OnInit {
 
-  constructor(public mapService: MapService, public dialog: MatDialog) { }
+  constructor(public placesService: PlacesService, public dialog: MatDialog) { }
 
   ngOnInit() {
   }
 
   tooglePlaceType(event: any, type: PlacesType) {
-    this.mapService.updatePlaceTypeVisibility(type.displayName, event.checked);
+    this.placesService.updatePlaceTypeVisibility(type.displayName, event.checked);
   }
 
   openAddFilterForm() {

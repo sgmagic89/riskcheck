@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { EarthQuake, EarthQuakeData, EarthQuakeParameters } from '../models/eartQuakeData.model';
+import { EarthQuake, EarthQuakeData, EarthQuakeParameters } from '../../models/eartQuakeData.model';
 import { switchMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 @Injectable({
