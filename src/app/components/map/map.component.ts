@@ -1,11 +1,9 @@
 import { AgmMap, MapsAPILoader } from '@agm/core';
 import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { EarthQuakeParameters } from 'src/app/models/eartQuakeData.model';
 import { PlacesType } from 'src/app/models/placesType.model';
-import { ApiService } from 'src/app/services/api.service';
-import { HazzardService } from 'src/app/services/hazzard.service';
-import { MapService } from 'src/app/services/map.service';
+import { LocationService } from 'src/app/services/logicalServices/location.service';
+import { PlacesService } from 'src/app/services/logicalServices/places.service';
 
 @Component({
   selector: 'app-map',
@@ -29,7 +27,8 @@ export class MapComponent implements OnInit {
     }
   }
   constructor(
-    public mapService: MapService,
+    public locationService: LocationService,
+    public placesService: PlacesService,
     private ngZone: NgZone,
     private mapsAPILoader: MapsAPILoader,
     private spinner: NgxSpinnerService
@@ -37,12 +36,13 @@ export class MapComponent implements OnInit {
 
   ngOnInit() {
     this.mapsAPILoader.load().then(() => {
-      this.mapService.placeTypes$.subscribe((types) => {
-        this.mapService.location$.subscribe((location) => {
+      this.placesService.placeTypes$.subscribe((types) => {
+        this.locationService.location$.subscribe((location) => {
           if (location.latitude && location.longitude) {
             this.ngZone.run(() => {
               this.latitude = location.latitude;
               this.longitude = location.longitude;
+              this.zoom = location.zoom;
               console.log('Location Coordinates', location);
               this.getPlaces(types, {
                 lat: location.latitude,
@@ -52,7 +52,7 @@ export class MapComponent implements OnInit {
                 this.spinner.hide();
               }, 1000);
               if (!types.some((type) => type.isVisible === true)) {
-                this.zoom = 14;
+                this.zoom = location.zoom;
                 setTimeout(() => {
                   this.spinner.hide();
                 }, 1000);
@@ -66,7 +66,7 @@ export class MapComponent implements OnInit {
 
   getPlaces(types: PlacesType[], location: any) {
     this.spinner.show();
-    this.mapService.emptyPlaceTypeDataSet();
+    this.placesService.emptyPlaceTypeDataSet();
     this.palcesService = new google.maps.places.PlacesService(this.agmMap);
     for (let type of types) {
       if (type.isVisible) {
@@ -88,15 +88,6 @@ export class MapComponent implements OnInit {
               res["distance"]=this.getDistance({lat:this.latitude, lng:this.longitude}, {lat:res.geometry.location.lat(),lng:res.geometry.location.lng()} )
               return res;
             })
-            // results.sort((a: any, b: any) => {
-            //   if (a.distance < b.distance) {
-            //     return -1;
-            //   }
-            //   if (a.distance > b.distance) {
-            //     return 1;
-            //   }
-            //   return 0;
-            // });
             console.log(type.displayName, results);
 
             // if(pagination.hasNextPage) {
@@ -120,7 +111,7 @@ export class MapComponent implements OnInit {
           height: 24,
         },
       };
-      this.mapService.updatePlaceTypeData(placeType, {
+      this.placesService.updatePlaceTypeData(placeType, {
         latitude: location.lat(),
         longitude: location.lng(),
         name: place.name,
@@ -131,11 +122,6 @@ export class MapComponent implements OnInit {
     this.agmMap.fitBounds(bounds);
   }
 
-  isPlaceTypeVisible(placeType: PlacesType) {
-    this.mapService.placeTypes$.subscribe((type) => {
-      return true;
-    });
-  }
   rad = (x:number)=> x * Math.PI / 180;
   
   getDistance = (p1:{lat:number,lng:number}, p2:{lat:number,lng:number})=> {

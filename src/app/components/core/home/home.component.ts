@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { AutoUnsubscribe } from "ngx-auto-unsubscribe";
 import { Subscription } from 'rxjs';
 import { EarthQuakeParameters } from 'src/app/models/eartQuakeData.model';
-import { HazzardService } from 'src/app/services/hazzard.service';
-import { MapService } from 'src/app/services/map.service';
+import { HazzardService } from 'src/app/services/logicalServices/hazzard.service';
+import { LocationService } from 'src/app/services/logicalServices/location.service';
+import { PlacesService } from 'src/app/services/logicalServices/places.service';
 
 @AutoUnsubscribe()
 @Component({
@@ -14,10 +15,13 @@ import { MapService } from 'src/app/services/map.service';
 export class HomeComponent implements OnInit, OnDestroy {
   mapSubscription: Subscription = <Subscription>{};
   hazzarSubscription: Subscription = <Subscription>{};
-  constructor(private mapService: MapService, private hazzardService: HazzardService) { }
+  constructor(private locationService: LocationService,
+    private placesService: PlacesService,
+    private hazzardService: HazzardService) { }
 
   ngOnInit() {
-    this.mapSubscription = this.mapService.location$.subscribe((location) => {
+    this.placesService.createDefaultPlaceTypes();
+    this.mapSubscription = this.locationService.location$.subscribe((location) => {
       if(location.latitude && location.longitude) {
         const params = new EarthQuakeParameters();
         params.latitude = location.latitude;
