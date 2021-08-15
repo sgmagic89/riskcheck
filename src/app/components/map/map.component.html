@@ -1,7 +1,7 @@
 <ngx-spinner></ngx-spinner>
 <div fxFlex>
-  <agm-map #AgmMap [latitude]="latitude" [longitude]="longitude" [zoom]="zoom">
-    <agm-marker [latitude]="latitude" [longitude]="longitude"></agm-marker>
+  <agm-map #AgmMap [latitude]="location.latitude" [longitude]="location.longitude" [zoom]="location.zoom">
+    <agm-marker [latitude]="location.latitude" [longitude]="location.longitude"></agm-marker>
       <ng-container *ngFor="let placeTypeData of placesService.placeTypeDataSet$ | async">
         <ng-container *ngFor="let place of placeTypeData.data">
           <agm-marker [visible]="placeTypeData.placeType.isVisible" [iconUrl]="place.icon" [latitude]="place.latitude" [longitude]="place.longitude">
