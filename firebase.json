@@ -9,7 +9,7 @@
     "rewrites": [
       {
         "source": "**",
-        "destination": "RiskCheck/index.html"
+        "destination": "/index.html"
       }
     ]
   }
