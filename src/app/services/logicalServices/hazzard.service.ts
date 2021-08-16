@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 import { EarthQuakeParameters, EarthQuakeData } from 'src/app/models/eartQuakeData.model';
-import { ApiService } from '../dataServices/api.service';
+import { ApiService } from '../helperServices/api.service';
 
 
 @Injectable({

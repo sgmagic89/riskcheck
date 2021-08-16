@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { ElementRef, NgZone } from '@angular/core';
+import { NgZone } from '@angular/core';
 import { PlacesType } from '../../models/placesType.model';
 import { PlaceTypeData } from '../../models/placeTypeData.model';
-import { LocalstorageService } from '../dataServices/localstorage.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { LocationService } from './location.service';
 import { MapLocation } from 'src/app/models/location.model';
-import { AgmMap } from '@agm/core';
+import { LocalstorageService } from '../helperServices/localstorage.service';
+import { MapDataService } from '../dataServices/mapData.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,17 +16,11 @@ export class PlacesService {
 agmMap: any;
 googlePalcesService: any;
 currentLocation: MapLocation = <MapLocation>{};
-private _placeTypes = new BehaviorSubject<PlacesType[]>([]);
-placeTypes$ = this._placeTypes.asObservable();
 
-private placeTypeDataSet: PlaceTypeData[] = [];
-private _placeTypeDataSet = new Subject<PlaceTypeData[]>();
-placeTypeDataSet$ = this._placeTypeDataSet.asObservable();
-
-constructor(private storageService: LocalstorageService, 
-  private spinner: NgxSpinnerService,
+constructor(private spinner: NgxSpinnerService,
   private locationService: LocationService,
-  private ngZone: NgZone) { }
+  private mapDataService: MapDataService,
+  private storageService: LocalstorageService) { }
 
 initPlacesService(agmMap: any) {
   this.agmMap = agmMap;
@@ -34,7 +28,7 @@ initPlacesService(agmMap: any) {
     if(location.longitude && location.latitude) {
       this.currentLocation.latitude = location.latitude;
       this.currentLocation.longitude = location.longitude;
-      this.getPlaces(this.getPlaceTypes(), location);
+      this.getPlaces(this.mapDataService.getPlaceTypes(), location);
       this.hideSpinner(2000);
     }
   });
@@ -43,8 +37,7 @@ initPlacesService(agmMap: any) {
 
 getPlaces(types: PlacesType[], location: MapLocation) {
   this.spinner.show();
-  this.emptyPlaceTypeDataSet();
-  this.ngZone.run(() => {
+  this.mapDataService.emptyPlaceTypeDataSet();
     this.googlePalcesService = new google.maps.places.PlacesService(this.agmMap);
     for (let type of types) {
       if (type.isVisible) {
@@ -76,8 +69,6 @@ getPlaces(types: PlacesType[], location: MapLocation) {
         );
       }
     }
-  });
- 
 }
 
 createMarkers(places: any, placeType: PlacesType) {
@@ -91,7 +82,7 @@ createMarkers(places: any, placeType: PlacesType) {
         height: 24,
       },
     };
-    this.updatePlaceTypeData(placeType, {
+    this.mapDataService.updatePlaceTypeData(placeType, {
       latitude: location.lat(),
       longitude: location.lng(),
       name: place.name,
@@ -116,61 +107,24 @@ getDistance = (p1:{lat:number,lng:number}, p2:{lat:number,lng:number})=> {
   return d; // returns the distance in meter
 }
 
-getPlaceTypes() {
-  return this._placeTypes.getValue();
-}
-
 addPlaceType(placeType: PlacesType) {
-  const placeTypes = this._placeTypes.getValue();
-  const updatedpPaceTypes = [...placeTypes, placeType];
-  this._placeTypes.next(updatedpPaceTypes);
+  this.mapDataService.addPlaceType(placeType);
   if(this.agmMap) {
-    this.getPlaces(this.getPlaceTypes(), this.currentLocation);
+    this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
     this.hideSpinner(2000);
   }
-  this.storageService.removeItem('filters');
-  this.storageService.setItem('filters', updatedpPaceTypes);
 }
 
 deletePlaceType(placeType: PlacesType) {
-  const placeTypes = this._placeTypes.getValue();
-  const updatedpPaceTypes = placeTypes.filter(filter => filter.displayName != placeType.displayName);
-  this._placeTypes.next(updatedpPaceTypes);
-  this.getPlaces(this.getPlaceTypes(), this.currentLocation);
+  this.mapDataService.deletePlaceType(placeType);
+  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
-  this.storageService.removeItem('filters');
-  this.storageService.setItem('filters', updatedpPaceTypes);
 }
-
 
 updatePlaceTypeVisibility(placeType: string, visible: boolean) {
-  let placeTypes = this._placeTypes.getValue();
-  placeTypes.forEach(type => {
-    if(type.displayName === placeType) {
-      type.isVisible = visible;
-    }
-  });
-  this._placeTypes.next(placeTypes);
-  this.getPlaces(this.getPlaceTypes(), this.currentLocation);
+  this.mapDataService.updatePlaceTypeVisibility(placeType, visible);
+  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
-  this.storageService.removeItem('filters');
-  this.storageService.setItem('filters', placeTypes);
-}
-
-updatePlaceTypeData(placeType: PlacesType, data: any) {
-  const dataExists = this.placeTypeDataSet.some( type => type.placeType.displayName === placeType.displayName);
-  if(dataExists) {
-    this.placeTypeDataSet.forEach( type => {
-      if(type.placeType.displayName === placeType.displayName) {
-        type.data.push(data);
-      }
-    });
-  } else {
-    const plaeTypeData = new PlaceTypeData(placeType);
-    plaeTypeData.data.push(data)
-    this.placeTypeDataSet.push(plaeTypeData);
-  }
-  this._placeTypeDataSet.next(this.placeTypeDataSet);
 }
 
 createDefaultPlaceTypes() {
@@ -182,7 +136,7 @@ createDefaultPlaceTypes() {
     this.addPlaceType(placeType);
     placeType = new PlacesType('Fire Station',false,undefined,'fire station');
     this.addPlaceType(placeType);
-    this.storageService.setItem('filters', this._placeTypes.getValue())
+    this.storageService.setItem('filters', this.mapDataService.getPlaceTypes())
   } else {
     filters.forEach(filter => {
       this.addPlaceType(filter);
@@ -191,17 +145,11 @@ createDefaultPlaceTypes() {
   
 }
 
-emptyPlaceTypeDataSet() {
-  this.placeTypeDataSet.length = 0;
-  this._placeTypeDataSet.next(this.placeTypeDataSet);
-}
-
-
 hideSpinner(timeout: number) {
   setTimeout(() => {
     this.spinner.hide();
   }, timeout);
-  if (!this.getPlaceTypes().some((type) => type.isVisible === true)) {
+  if (!this.mapDataService.getPlaceTypes().some((type) => type.isVisible === true)) {
     // this.zoom = location.zoom;
     setTimeout(() => {
       this.spinner.hide();
