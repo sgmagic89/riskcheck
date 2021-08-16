@@ -3,6 +3,7 @@ import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { MapLocation } from 'src/app/models/location.model';
 import { PlacesType } from 'src/app/models/placesType.model';
+import { MapDataService } from 'src/app/services/dataServices/mapData.service';
 import { LocationService } from 'src/app/services/logicalServices/location.service';
 import { PlacesService } from 'src/app/services/logicalServices/places.service';
 
@@ -24,7 +25,8 @@ export class MapComponent implements OnInit {
   }
   constructor(
     public locationService: LocationService,
-    public placesService: PlacesService
+    public placesService: PlacesService,
+    public mapDataService: MapDataService
   ) {}
 
   ngOnInit() {
