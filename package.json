@@ -12,6 +12,7 @@
   "dependencies": {
     "@agm/core": "^3.0.0-beta.0",
     "@agm/snazzy-info-window": "^3.0.0-beta.0",
+    "@angular-extensions/model": "^10.0.1",
     "@angular/animations": "^12.1.4",
     "@angular/cdk": "^12.2.0",
     "@angular/common": "~12.1.0",
