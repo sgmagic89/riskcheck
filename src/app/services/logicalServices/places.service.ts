@@ -28,14 +28,22 @@ initPlacesService(agmMap: any) {
     if(location.longitude && location.latitude) {
       this.currentLocation.latitude = location.latitude;
       this.currentLocation.longitude = location.longitude;
-      this.getPlaces(this.mapDataService.getPlaceTypes(), location);
+      this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), location);
       this.hideSpinner(2000);
     }
   });
 }
 
+getPlacesData() {
+  return this.mapDataService.placesData$;
+}
 
-getPlaces(types: PlacesType[], location: MapLocation) {
+getPlaceTypes() {
+  return this.mapDataService.placeTypes$;
+}
+
+
+getPlacesFromAPI(types: PlacesType[], location: MapLocation) {
   this.spinner.show();
   this.mapDataService.emptyPlaceTypeDataSet();
     this.googlePalcesService = new google.maps.places.PlacesService(this.agmMap);
@@ -54,11 +62,12 @@ getPlaces(types: PlacesType[], location: MapLocation) {
               return;
             }
             this.spinner.hide();
-            this.createMarkers(results, type);
             results.map((res:any)=>{
               res["distance"]=this.getDistance({lat:location.latitude, lng:location.longitude}, {lat:res.geometry.location.lat(),lng:res.geometry.location.lng()} )
               return res;
-            })
+            });
+            this.createMarkers(results, type);
+
             console.log(type.displayName, results);
   
             // if(pagination.hasNextPage) {
@@ -110,20 +119,20 @@ getDistance = (p1:{lat:number,lng:number}, p2:{lat:number,lng:number})=> {
 addPlaceType(placeType: PlacesType) {
   this.mapDataService.addPlaceType(placeType);
   if(this.agmMap) {
-    this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+    this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
     this.hideSpinner(2000);
   }
 }
 
 deletePlaceType(placeType: PlacesType) {
   this.mapDataService.deletePlaceType(placeType);
-  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+  this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
 }
 
 updatePlaceTypeVisibility(placeType: string, visible: boolean) {
   this.mapDataService.updatePlaceTypeVisibility(placeType, visible);
-  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+  this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
 }
 

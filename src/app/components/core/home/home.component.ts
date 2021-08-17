@@ -26,9 +26,10 @@ export class HomeComponent implements OnInit, OnDestroy {
         const params = new EarthQuakeParameters();
         params.latitude = location.latitude;
         params.longitude = location.longitude;
-        this.hazzarSubscription = this.hazzardService.getEarthQuakeData(params).subscribe(
+        this.hazzardService.getEarthQuakeDataFromAPI(params);
+        this.hazzarSubscription = this.hazzardService.getEarthQuakeData().subscribe(
           data => {
-            console.log(data);
+            console.log('EarthQuake Data', data);
           }
         )
       }

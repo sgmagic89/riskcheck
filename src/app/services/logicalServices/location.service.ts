@@ -20,13 +20,13 @@ setLocation(location: MapLocation) {
 
 public setCurrentLocation() {
   this.spinner.show();
-  if ('geolocation' in navigator) {
-    navigator.geolocation.getCurrentPosition((position) => {
-      this.setLocation({latitude: position.coords.latitude, longitude: position.coords.longitude, zoom: 14});
-    }, (err) => {
-      this.spinner.hide();
-    });
-  }
+    if ('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition((position) => {
+        this.setLocation({latitude: position.coords.latitude, longitude: position.coords.longitude, zoom: 14});
+      }, (err) => {
+        this.spinner.hide();
+      });
+    }
 }
 
 public searchAddress(element: ElementRef<any>) {
