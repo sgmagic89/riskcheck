@@ -24,4 +24,8 @@ removeItem(itemKey: string) {
   localStorage.removeItem(itemKey);
 }
 
+clearAll() {
+  localStorage.clear();
+}
+
 }

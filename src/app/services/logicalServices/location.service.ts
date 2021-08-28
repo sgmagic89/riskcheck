@@ -3,6 +3,7 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { MapLocation } from 'src/app/models/location.model';
 import { MapDataService } from '../dataServices/mapData.service';
+import { LocalstorageService } from '../helperServices/localstorage.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,8 @@ export class LocationService {
 
 constructor(private spinner: NgxSpinnerService,
   private ngZone: NgZone,
-  private mapDataService: MapDataService) { 
+  private mapDataService: MapDataService,
+  private storageService: LocalstorageService) { 
     this.mapDataService.initLocation();
   }
 
@@ -25,6 +27,8 @@ getLocation() {
 
 clearLocation() {
   this.mapDataService.clearLocation();
+  this.mapDataService.emptyPlaceTypeDataSet();
+  this.storageService.clearAll();
 }
 
 public setCurrentLocation() {
