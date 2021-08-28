@@ -18,7 +18,7 @@ export class FilterComponent implements OnInit {
       if(initialized) {
         this.placesService.analyseLocation();
       }
-    })
+    });
   }
 
   search() {

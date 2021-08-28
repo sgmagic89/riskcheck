@@ -7,6 +7,7 @@ import { PlaceTypeData } from 'src/app/models/placeTypeData.model';
 import { MapDataService } from 'src/app/services/dataServices/mapData.service';
 import { HazzardService } from 'src/app/services/logicalServices/hazzard.service';
 import { LocationService } from 'src/app/services/logicalServices/location.service';
+import { PlacesService } from 'src/app/services/logicalServices/places.service';
 import { ChartService } from '../../services/chartService/chart.service'
 
 @Component({
@@ -38,14 +39,22 @@ export class AnalysisComponent implements OnInit, OnDestroy {
     private locationService: LocationService,
     private mapDataService: MapDataService,
     private hazzardService: HazzardService,
-    private router: Router) { }
+    private router: Router,
+    private placesService: PlacesService) { }
 
   ngOnInit() {
-    combineLatest(
+    combineLatest([
       this.locationService.getLocation(),
       this.mapDataService.placesData$
+    ]
     ).subscribe(result=>{
-      if(result[1].length === 0) this.router.navigate([""])
+      if(result[1].length === 0) {
+        this.placesService.mapInitialized$.subscribe(initialized => {
+          if(initialized) {
+            this.placesService.analyseLocation();
+          }
+        });
+      }
         this.placesType=result[1];
         this.chartOptions.centerText=" 70 ";
     })
