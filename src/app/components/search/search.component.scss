@@ -1,5 +1,11 @@
 .full-width {
-    width: 100%;
+    width: 70%;
+}
+
+.analyze{
+    padding: .75em .75em 0 .75em;
+    margin-left: 0.5rem;
+    width: 28%
 }
 
 :host::ng-deep .mat-form-field-flex {

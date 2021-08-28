@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -10,7 +11,7 @@ export class AppComponent implements OnInit {
   navVisible = false;
   @ViewChild('drawer',{static: true})
   public sidenav: MatSidenav = <MatSidenav>{};
-  constructor() {
+  constructor(private router:Router) {
   }
   ngOnInit() {
     
@@ -21,6 +22,10 @@ export class AppComponent implements OnInit {
 
   closeNav() {
     this.sidenav.close();
+  }
+
+  gotoHome(){
+    this.router.navigate([""]);
   }
 
 }

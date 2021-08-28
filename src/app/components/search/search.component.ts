@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, Output, ViewChild, EventEmitter } from '@angular/core';
 import { MapsAPILoader } from '@agm/core';
 import { LocationService } from 'src/app/services/logicalServices/location.service';
 
@@ -10,7 +10,8 @@ import { LocationService } from 'src/app/services/logicalServices/location.servi
 export class SearchComponent implements OnInit {
   @ViewChild('search')
   public searchElementRef: ElementRef = <ElementRef>{};
-
+  @Output() analyze= new EventEmitter();
+  
   constructor(public locationService: LocationService, 
     private mapsAPILoader: MapsAPILoader) { }
 
@@ -21,7 +22,8 @@ export class SearchComponent implements OnInit {
     });
   }
 
-
-  
+  analyzeClick(){
+    this.analyze.emit("");
+  }
 
 }

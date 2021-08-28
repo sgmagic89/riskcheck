@@ -3,5 +3,6 @@
     <mat-label>Let's get started by locating the Property</mat-label>
     <input matInput value="" class="form-control" (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
   </mat-form-field>
+  <button mat-raised-button color="primary" (click)="analyzeClick()" type="button" class="analyze">Analyze</button>
 </form>
 <app-search-filters></app-search-filters>
