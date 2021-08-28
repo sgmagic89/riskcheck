@@ -28,14 +28,9 @@
         }
         .map {
             flex: 1;
-            display: none;
         }
 
         .smallMap {
                 flex: 0.5 !important;  
         }
-    }
-    
-    .mapVisible {
-        display: block !important;
     }

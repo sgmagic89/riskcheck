@@ -25,15 +25,22 @@ export class AppComponent implements OnInit {
     private hazzardService: HazzardService,
     private router: Router) {
     router.events.subscribe((val) => {
-      this.isMapVisible = true;
       if(val instanceof NavigationEnd) {
         if(val.url === '/configure') {
           this.isSmallMap = true;
-        } else if(val.url ==="/analyze"){
-          this.isMapVisible = false;
-        }else {
+        } else {
           this.isSmallMap = false;
         }
+        if(val.url ==="/analyze"){
+          this.isMapVisible = false;
+        }
+        this.locationService.getLocation().subscribe(location => {
+          if(location.address && location.address !== '') {
+            this.isMapVisible = true;
+          } else {
+            this.isMapVisible = false;
+          }
+        })
       }
     });
   }
@@ -51,7 +58,7 @@ export class AppComponent implements OnInit {
         params.longitude = location.longitude;
         this.hazzardService.getEarthQuakeDataFromAPI(params);
       }
-      if(location.address) {
+      if(location.address && location.address !== '') {
         this.isMapVisible = true;
       } else {
         this.isMapVisible = false;
