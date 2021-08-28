@@ -3,8 +3,8 @@
   <button mat-icon-button class="icon" (click)="toogleNav()" aria-label="menu-icon">
     <mat-icon>menu</mat-icon>
   </button>
-  <img src="assets/logo.png" class="logo"/>
-  <span>Risk Check</span>
+  <img (click)="gotoHome()" src="assets/logo.png" class="logo"/>
+  <span (click)="gotoHome()">Risk Check</span>
 </mat-toolbar>
 <mat-drawer-container (backdropClick)="closeNav()" class="base-container" autosize >
   <mat-drawer #drawer class="sidenav" [opened]="navVisible" mode="over">

@@ -25,4 +25,7 @@ export class FilterComponent implements OnInit {
     this.router.navigate(['search']);
   }
 
+  generateReport(){
+    this.router.navigate(["analyze"])
+  }
 }

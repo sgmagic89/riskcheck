@@ -57,10 +57,18 @@ getPlaceTypes() {
 
 addPlaceType(placeType: PlacesType) {
   const placeTypes = this.getPlaceTypes();
-  const updatedpPaceTypes = [...placeTypes, placeType];
-  this.placeTypesModel.set(updatedpPaceTypes);
-  this.storageService.removeItem('filters');
-  this.storageService.setItem('filters', updatedpPaceTypes);
+  let checkForPlaceType=placeTypes.some(place=>{
+    if(place.displayName === placeType.displayName)
+      return true;
+    else 
+      return false
+  })
+  if(!checkForPlaceType){
+    const updatedpPaceTypes = [...placeTypes, placeType];
+    this.placeTypesModel.set(updatedpPaceTypes);
+    this.storageService.removeItem('filters');
+    this.storageService.setItem('filters', updatedpPaceTypes);
+  }
 }
 
 deletePlaceType(placeType: PlacesType) {

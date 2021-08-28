@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
 import {AgmCoreModule} from '@agm/core';
@@ -11,6 +11,8 @@ import { SindeNavComponent } from './components/core/sinde-nav/sinde-nav.compone
 import { AddFilterComponent } from './components/filters/add-filter/add-filter.component';
 import { ManageFiltersComponent } from './components/filters/manage-filters/manage-filters.component';
 import { SearchFiltersComponent } from './components/filters/search-filters/search-filters.component';
+import { AnalysisComponent } from './components/analysis/analysis.component';
+import { ChartsModule } from 'ng2-charts';
 import { FilterComponent } from './components/filters/filter/filter.component';
 
 @NgModule({
@@ -22,6 +24,7 @@ import { FilterComponent } from './components/filters/filter/filter.component';
       AddFilterComponent,
       SindeNavComponent,
       ManageFiltersComponent,
+      AnalysisComponent,
       FilterComponent
    ],
    imports: [
@@ -29,6 +32,7 @@ import { FilterComponent } from './components/filters/filter/filter.component';
 	 BrowserAnimationsModule,
 	 AppRoutingModule,
 	 SharedModule,
+    ChartsModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyA8UJo6cf5uBYRL0qMIjZrnqT1IDF_A6Dk',
       libraries: ['places']
@@ -38,6 +42,7 @@ import { FilterComponent } from './components/filters/filter/filter.component';
    providers: [],
    bootstrap: [
       AppComponent
-   ]
+   ],
+   schemas:[CUSTOM_ELEMENTS_SCHEMA]
 })
 export class AppModule { }

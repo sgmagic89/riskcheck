@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
 import { NavigationEnd, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -25,10 +25,13 @@ export class AppComponent implements OnInit {
     private hazzardService: HazzardService,
     private router: Router) {
     router.events.subscribe((val) => {
+      this.isMapVisible = true;
       if(val instanceof NavigationEnd) {
         if(val.url === '/configure') {
           this.isSmallMap = true;
-        } else {
+        } else if(val.url ==="/analyze"){
+          this.isMapVisible = false;
+        }else {
           this.isSmallMap = false;
         }
       }
@@ -61,6 +64,10 @@ export class AppComponent implements OnInit {
 
   closeNav() {
     this.sidenav.close();
+  }
+
+  gotoHome(){
+    this.router.navigate([""]);
   }
 
 }
