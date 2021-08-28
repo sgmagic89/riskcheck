@@ -11,5 +11,11 @@
     }
     .map {
         flex: 1;
+        display: none;
+        // transition: all 5s ease-out;
     }
+}
+
+.mapVisible {
+    display: block !important;
 }

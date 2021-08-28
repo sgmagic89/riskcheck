@@ -15,23 +15,27 @@ import { PlacesService } from 'src/app/services/logicalServices/places.service';
 export class HomeComponent implements OnInit, OnDestroy {
   mapSubscription: Subscription = <Subscription>{};
   hazzarSubscription: Subscription = <Subscription>{};
+  isMapVisible = false;
   constructor(private locationService: LocationService,
     private placesService: PlacesService,
     private hazzardService: HazzardService) { }
 
   ngOnInit() {
+    this.hazzarSubscription = this.hazzardService.getEarthQuakeData().subscribe(
+      data => {
+        console.log('EarthQuake Data', data);
+      }
+    )
     this.placesService.createDefaultPlaceTypes();
-    this.mapSubscription = this.locationService.location$.subscribe((location) => {
+    this.mapSubscription = this.locationService.getLocation().subscribe((location) => {
       if(location.latitude && location.longitude) {
         const params = new EarthQuakeParameters();
         params.latitude = location.latitude;
         params.longitude = location.longitude;
         this.hazzardService.getEarthQuakeDataFromAPI(params);
-        this.hazzarSubscription = this.hazzardService.getEarthQuakeData().subscribe(
-          data => {
-            console.log('EarthQuake Data', data);
-          }
-        )
+      }
+      if(location.address) {
+        this.isMapVisible = true;
       }
     });
   }

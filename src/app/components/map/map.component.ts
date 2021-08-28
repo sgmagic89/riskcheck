@@ -26,7 +26,7 @@ export class MapComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-      this.locationService.location$.subscribe(location => {
+      this.locationService.getLocation().subscribe(location => {
         this.location = location;
       });
   }

@@ -16,6 +16,8 @@ export class PlacesService {
 agmMap: any;
 googlePalcesService: any;
 currentLocation: MapLocation = <MapLocation>{};
+private _mapInitialized = new Subject();
+mapInitialized$ = this._mapInitialized.asObservable();
 
 constructor(private spinner: NgxSpinnerService,
   private locationService: LocationService,
@@ -24,7 +26,11 @@ constructor(private spinner: NgxSpinnerService,
 
 initPlacesService(agmMap: any) {
   this.agmMap = agmMap;
-  this.locationService.location$.subscribe(location => {
+  this._mapInitialized.next(true);
+}
+
+analyseLocation() {
+  this.locationService.getLocation().subscribe(location => {
     if(location.longitude && location.latitude) {
       this.currentLocation.latitude = location.latitude;
       this.currentLocation.longitude = location.longitude;
@@ -139,11 +145,11 @@ updatePlaceTypeVisibility(placeType: string, visible: boolean) {
 createDefaultPlaceTypes() {
   const filters: any[] = this.storageService.getItem('filters')
   if(!filters) {
-    let placeType = new PlacesType('Hospital',false,'hospital');
+    let placeType = new PlacesType('Hospital',true,'hospital');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Police Station',false,'police');
+    placeType = new PlacesType('Police Station',true,'police');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Fire Station',false,undefined,'fire station');
+    placeType = new PlacesType('Fire Station',true,undefined,'fire station');
     this.addPlaceType(placeType);
     this.storageService.setItem('filters', this.mapDataService.getPlaceTypes())
   } else {
@@ -152,6 +158,10 @@ createDefaultPlaceTypes() {
     })
   }
   
+}
+
+clearPlacesData() {
+  this.mapDataService.emptyPlaceTypeDataSet();
 }
 
 hideSpinner(timeout: number) {

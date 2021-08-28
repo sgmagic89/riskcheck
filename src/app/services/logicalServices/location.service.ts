@@ -1,7 +1,8 @@
 import { ElementRef, Injectable, NgZone } from '@angular/core';
 import { NgxSpinnerService } from 'ngx-spinner';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subject } from 'rxjs';
 import { MapLocation } from 'src/app/models/location.model';
+import { MapDataService } from '../dataServices/mapData.service';
 
 @Injectable({
   providedIn: 'root'
@@ -9,20 +10,46 @@ import { MapLocation } from 'src/app/models/location.model';
 export class LocationService {
 
 constructor(private spinner: NgxSpinnerService,
-  private ngZone: NgZone) { }
-
-private _location = new BehaviorSubject<MapLocation>(<MapLocation>{});
-location$ = this._location.asObservable();
+  private ngZone: NgZone,
+  private mapDataService: MapDataService) { 
+    this.mapDataService.initLocation();
+  }
 
 setLocation(location: MapLocation) {
-  this._location.next(location);
+  this.mapDataService.setLocation(location);
+}
+
+getLocation() {
+  return this.mapDataService.location$;
+}
+
+clearLocation() {
+  this.mapDataService.clearLocation();
 }
 
 public setCurrentLocation() {
   this.spinner.show();
+  const geocoder = new google.maps.Geocoder();
     if ('geolocation' in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
-        this.setLocation({latitude: position.coords.latitude, longitude: position.coords.longitude, zoom: 14});
+        console.log(position);
+        const latlng = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        };
+        geocoder.geocode({ location: latlng }, (result) => {
+          const address = result.length > 2 ? result[1].formatted_address : result[0].formatted_address;
+          this.setLocation(
+            {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              zoom: 14,
+              address: address,
+              name: address.split(',')[0]
+            });
+            this.spinner.hide(undefined, 1000);
+        });
+        
       }, (err) => {
         this.spinner.hide();
       });
@@ -39,11 +66,20 @@ public searchAddress(element: ElementRef<any>) {
 
           //verify result
           if (place.geometry === undefined || place.geometry === null) {
+            this.spinner.hide();
             return;
           }
-
           //set latitude, longitude and zoom
-          this.setLocation({latitude: place.geometry.location.lat(), longitude: place.geometry.location.lng(), zoom: 14});
+          this.setLocation(
+            {
+              latitude: place.geometry.location.lat(), 
+              longitude: place.geometry.location.lng(),
+              zoom: 14, 
+              address: place.name + ', ' + place.formatted_address,
+              name: place.name
+            });
+            this.spinner.hide(undefined, 1000);
+
         });
       });
 }
