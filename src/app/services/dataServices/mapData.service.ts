@@ -4,11 +4,15 @@ import { Observable } from 'rxjs';
 import { PlaceTypeData } from 'src/app/models/placeTypeData.model';
 import { PlacesType } from 'src/app/models/placesType.model';
 import { LocalstorageService } from '../helperServices/localstorage.service';
+import { MapLocation } from 'src/app/models/location.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MapDataService {
+
+private locationModel: Model<MapLocation>;
+location$: Observable<MapLocation>;
 
 private placeTypesModel: Model<PlacesType[]>;
 placeTypes$: Observable<PlacesType[]>;
@@ -18,12 +22,33 @@ placesData$: Observable<PlaceTypeData[]>;
 
 constructor(private modelFactoryPlaceTypeData: ModelFactory<PlaceTypeData[]>,
   private modelFactoryPlaceTypes: ModelFactory<PlacesType[]>,
+  private modelFactoryLocation: ModelFactory<MapLocation>,
   private storageService: LocalstorageService) {
   this.placesDataModel = this.modelFactoryPlaceTypeData.create([]);
   this.placesData$ = this.placesDataModel.data$;
 
   this.placeTypesModel = this.modelFactoryPlaceTypes.create([]);
   this.placeTypes$ = this.placeTypesModel.data$;
+
+  this.locationModel = this.modelFactoryLocation.create(<MapLocation>{longitude: 0, latitude: 0, zoom: 0, address: ''});
+  this.location$ = this.locationModel.data$;
+}
+
+initLocation() {
+  const location = this.storageService.getItem('currentLocation');
+  if(location) {
+    this.setLocation(location);
+  }
+}
+
+setLocation(location: MapLocation) {
+  this.locationModel.set(location);
+  this.storageService.setItem('currentLocation', location);
+}
+
+clearLocation() {
+  this.storageService.removeItem('currentLocation');
+  this.locationModel.set(<MapLocation>{longitude: 0, latitude: 0, zoom: 0, address: ''});
 }
 
 getPlaceTypes() {

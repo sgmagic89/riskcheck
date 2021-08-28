@@ -1,12 +1,21 @@
-<!-- <div *ngFor="let place of placesType">
+<div *ngFor="let place of placesType">
   <h2>{{place.placeType.displayName}}</h2>
   <div *ngFor="let data of place.data;  let i='index'">
     <span *ngIf="i < 2">{{data.name}}</span>
   </div>
   <span *ngIf="place.data.length > 2">+++view More</span>
-</div> -->
+</div>
 
-
-<div style="display: block; width:700px; height:700px;">
   <app-chart></app-chart>
- </div>
+<!-- 
+<div style="display: block; width:700px; height:700px;">
+ </div> -->
+
+ <canvas baseChart [plugins]="doughnutChartPlugins"
+              [data]="demodoughnutChartData"
+              [colors] ="colors"
+              [options]="chartOptions"
+              [labels]="doughnutChartLabels"
+              [chartType]="doughnutChartType"
+              (chartHover)="chartHovered($event)"
+              (chartClick)="chartClicked($event)"></canvas>

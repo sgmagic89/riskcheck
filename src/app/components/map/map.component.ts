@@ -1,9 +1,6 @@
-import { AgmMap, MapsAPILoader } from '@agm/core';
-import { Component, NgZone, OnInit, ViewChild } from '@angular/core';
-import { NgxSpinnerService } from 'ngx-spinner';
+import { AgmMap } from '@agm/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MapLocation } from 'src/app/models/location.model';
-import { PlacesType } from 'src/app/models/placesType.model';
-import { MapDataService } from 'src/app/services/dataServices/mapData.service';
 import { LocationService } from 'src/app/services/logicalServices/location.service';
 import { PlacesService } from 'src/app/services/logicalServices/places.service';
 
@@ -25,12 +22,11 @@ export class MapComponent implements OnInit {
   }
   constructor(
     public locationService: LocationService,
-    public placesService: PlacesService,
-    public mapDataService: MapDataService
+    public placesService: PlacesService
   ) {}
 
   ngOnInit() {
-      this.locationService.location$.subscribe(location => {
+      this.locationService.getLocation().subscribe(location => {
         this.location = location;
       });
   }

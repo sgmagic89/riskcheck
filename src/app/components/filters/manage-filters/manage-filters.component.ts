@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { PlacesType } from 'src/app/models/placesType.model';
-import { MapDataService } from 'src/app/services/dataServices/mapData.service';
 import { PlacesService } from 'src/app/services/logicalServices/places.service';
 import { AddFilterComponent } from '../add-filter/add-filter.component';
 
@@ -13,13 +12,12 @@ import { AddFilterComponent } from '../add-filter/add-filter.component';
 export class ManageFiltersComponent implements OnInit {
   displayedColumns: string[] = ['displayName', 'type', 'keyword', 'isVisible', 'canDelete'];
   dataSource: PlacesType[] = [];
-  constructor(private mapDataService: MapDataService,
-    private placesService: PlacesService, 
+  constructor(private placesService: PlacesService, 
     public dialog: MatDialog, 
     private dialogRef: MatDialogRef<ManageFiltersComponent>,) { }
 
   ngOnInit() {
-    this.mapDataService.placeTypes$.subscribe(placeTypes => {
+    this.placesService.getPlaceTypes().subscribe(placeTypes => {
       this.dataSource = placeTypes;
     })
   }

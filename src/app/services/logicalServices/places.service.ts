@@ -16,6 +16,8 @@ export class PlacesService {
 agmMap: any;
 googlePalcesService: any;
 currentLocation: MapLocation = <MapLocation>{};
+private _mapInitialized = new Subject();
+mapInitialized$ = this._mapInitialized.asObservable();
 
 constructor(private spinner: NgxSpinnerService,
   private locationService: LocationService,
@@ -24,18 +26,30 @@ constructor(private spinner: NgxSpinnerService,
 
 initPlacesService(agmMap: any) {
   this.agmMap = agmMap;
-  this.locationService.location$.subscribe(location => {
+  this._mapInitialized.next(true);
+}
+
+analyseLocation() {
+  this.locationService.getLocation().subscribe(location => {
     if(location.longitude && location.latitude) {
       this.currentLocation.latitude = location.latitude;
       this.currentLocation.longitude = location.longitude;
-      this.getPlaces(this.mapDataService.getPlaceTypes(), location);
+      this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), location);
       this.hideSpinner(2000);
     }
   });
 }
 
+getPlacesData() {
+  return this.mapDataService.placesData$;
+}
 
-getPlaces(types: PlacesType[], location: MapLocation) {
+getPlaceTypes() {
+  return this.mapDataService.placeTypes$;
+}
+
+
+getPlacesFromAPI(types: PlacesType[], location: MapLocation) {
   this.spinner.show();
   this.mapDataService.emptyPlaceTypeDataSet();
     this.googlePalcesService = new google.maps.places.PlacesService(this.agmMap);
@@ -54,11 +68,12 @@ getPlaces(types: PlacesType[], location: MapLocation) {
               return;
             }
             this.spinner.hide();
-            this.createMarkers(results, type);
             results.map((res:any)=>{
               res["distance"]=this.getDistance({lat:location.latitude, lng:location.longitude}, {lat:res.geometry.location.lat(),lng:res.geometry.location.lng()} )
               return res;
-            })
+            });
+            this.createMarkers(results, type);
+
             console.log(type.displayName, results);
   
             // if(pagination.hasNextPage) {
@@ -110,31 +125,31 @@ getDistance = (p1:{lat:number,lng:number}, p2:{lat:number,lng:number})=> {
 addPlaceType(placeType: PlacesType) {
   this.mapDataService.addPlaceType(placeType);
   if(this.agmMap) {
-    this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+    this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
     this.hideSpinner(2000);
   }
 }
 
 deletePlaceType(placeType: PlacesType) {
   this.mapDataService.deletePlaceType(placeType);
-  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+  this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
 }
 
 updatePlaceTypeVisibility(placeType: string, visible: boolean) {
   this.mapDataService.updatePlaceTypeVisibility(placeType, visible);
-  this.getPlaces(this.mapDataService.getPlaceTypes(), this.currentLocation);
+  this.getPlacesFromAPI(this.mapDataService.getPlaceTypes(), this.currentLocation);
   this.hideSpinner(2000);
 }
 
 createDefaultPlaceTypes() {
   const filters: any[] = this.storageService.getItem('filters')
   if(!filters) {
-    let placeType = new PlacesType('Hospital',false,'hospital');
+    let placeType = new PlacesType('Hospital',true,'hospital');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Police Station',false,'police');
+    placeType = new PlacesType('Police Station',true,'police');
     this.addPlaceType(placeType);
-    placeType = new PlacesType('Fire Station',false,undefined,'fire station');
+    placeType = new PlacesType('Fire Station',true,undefined,'fire station');
     this.addPlaceType(placeType);
     this.storageService.setItem('filters', this.mapDataService.getPlaceTypes())
   } else {
@@ -143,6 +158,10 @@ createDefaultPlaceTypes() {
     })
   }
   
+}
+
+clearPlacesData() {
+  this.mapDataService.emptyPlaceTypeDataSet();
 }
 
 hideSpinner(timeout: number) {

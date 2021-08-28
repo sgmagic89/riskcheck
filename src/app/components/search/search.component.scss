@@ -1,13 +1,41 @@
-.full-width {
-    width: 70%;
+:host::ng-deep .mat-form-field-wrapper {
+    .mat-form-field-flex {
+        border: grey 1px solid;
+    }
+    
 }
 
-.analyze{
-    padding: .75em .75em 0 .75em;
-    margin-left: 0.5rem;
-    width: 28%
-}
+.baseContainer {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .search {
+        display: flex;
+        align-items: center;
+        position: relative;
+        .searchField {
+            width: 100%;
+        }
+        .mylocation {
+            padding-bottom: 1.3rem;
+            font-size: 25px;
+            cursor: pointer;
+            position: absolute;
+            right: 15px;
+        }
+        .mylocation:hover {
+            color: green;
+        }
+    }
 
-:host::ng-deep .mat-form-field-flex {
-    border: grey 1px solid;
+
+    .heading {
+        margin-bottom: 40px;
+        font-size: 30px;
+        line-height: 35px;
+    }
+    .actions {
+        display: flex;
+    }
 }

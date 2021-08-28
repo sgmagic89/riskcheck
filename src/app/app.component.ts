@@ -1,6 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatSidenav } from '@angular/material/sidenav';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { EarthQuakeParameters } from './models/eartQuakeData.model';
+import { HazzardService } from './services/logicalServices/hazzard.service';
+import { LocationService } from './services/logicalServices/location.service';
+import { PlacesService } from './services/logicalServices/places.service';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -9,12 +14,49 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'RiskCheck';
   navVisible = false;
+  mapSubscription: Subscription = <Subscription>{};
+  hazzarSubscription: Subscription = <Subscription>{};
+  isMapVisible = false;
+  isSmallMap = false;
   @ViewChild('drawer',{static: true})
   public sidenav: MatSidenav = <MatSidenav>{};
-  constructor(private router:Router) {
+  constructor(private locationService: LocationService,
+    private placesService: PlacesService,
+    private hazzardService: HazzardService,
+    private router: Router) {
+    router.events.subscribe((val) => {
+      this.isMapVisible = true;
+      if(val instanceof NavigationEnd) {
+        if(val.url === '/configure') {
+          this.isSmallMap = true;
+        } else if(val.url ==="/analyze"){
+          this.isMapVisible = false;
+        }else {
+          this.isSmallMap = false;
+        }
+      }
+    });
   }
   ngOnInit() {
-    
+    this.hazzarSubscription = this.hazzardService.getEarthQuakeData().subscribe(
+      data => {
+        console.log('EarthQuake Data', data);
+      }
+    )
+    this.placesService.createDefaultPlaceTypes();
+    this.mapSubscription = this.locationService.getLocation().subscribe((location) => {
+      if(location.latitude && location.longitude) {
+        const params = new EarthQuakeParameters();
+        params.latitude = location.latitude;
+        params.longitude = location.longitude;
+        this.hazzardService.getEarthQuakeDataFromAPI(params);
+      }
+      if(location.address) {
+        this.isMapVisible = true;
+      } else {
+        this.isMapVisible = false;
+      }
+    });
   }
   toogleNav() {
     this.sidenav.toggle();

@@ -13,7 +13,7 @@ import { ManageFiltersComponent } from './components/filters/manage-filters/mana
 import { SearchFiltersComponent } from './components/filters/search-filters/search-filters.component';
 import { AnalysisComponent } from './components/analysis/analysis.component';
 import { ChartsModule } from 'ng2-charts';
-import { ChartComponent } from './components/core/chart/chart.component';
+import { FilterComponent } from './components/filters/filter/filter.component';
 
 @NgModule({
    declarations: [
@@ -25,7 +25,7 @@ import { ChartComponent } from './components/core/chart/chart.component';
       SindeNavComponent,
       ManageFiltersComponent,
       AnalysisComponent,
-      ChartComponent
+      FilterComponent
    ],
    imports: [
 	 BrowserModule,

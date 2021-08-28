@@ -1,8 +1,21 @@
-<form class="form">
-  <mat-form-field class="full-width" appearance="fill">
-    <mat-label>Let's get started by locating the Property</mat-label>
-    <input matInput value="" class="form-control" (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
-  </mat-form-field>
-  <button mat-raised-button color="primary" (click)="analyzeClick()" type="button" class="analyze">Analyze</button>
-</form>
-<app-search-filters></app-search-filters>
+<div class="baseContainer">
+  <span class="heading" *ngIf="!locationFound">Let's get started by locating the Property</span>
+  <div class="search full-width">
+    <form class="form searchField">
+      <mat-form-field class="full-width" appearance="fill">
+        <mat-label>Enter the property address</mat-label>
+        <input matInput [value]="(locationService.getLocation() | async)?.address" class="form-control" (keydown.enter)="$event.preventDefault()" autocorrect="off" autocapitalize="off" spellcheck="off" type="text" #search>
+      </mat-form-field>
+    </form>
+    <mat-icon class="mylocation" matTooltip="Use my location" matTooltipPosition="above" (click)="locationService.setCurrentLocation()">my_location</mat-icon>
+  </div>
+ 
+
+  <div class="actions" fxLayoutGap="10px">
+    <button mat-stroked-button color="primary" (click)="startaAnalysis()" *ngIf="locationFound">Start Analysis</button>
+    <button mat-stroked-button color="primary" (click)="clearLocation()" *ngIf="locationFound">Clear Location</button>
+  </div>
+
+</div>
+
+<!-- <app-search-filters></app-search-filters> -->

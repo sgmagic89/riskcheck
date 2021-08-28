@@ -15,7 +15,7 @@ import { ChartService } from '../../services/chartService/chart.service'
   styleUrls: ['./analysis.component.scss']
 })
 export class AnalysisComponent implements OnInit, OnDestroy {
-  placesType: PlaceTypeData[]=[]
+  placesType : PlaceTypeData[]=[];
   // Doughnut
   public doughnutChartLabels:string[] = ['Good', 'Moderate', 'Bad'];
   public colors: Color[] = [
@@ -34,28 +34,29 @@ export class AnalysisComponent implements OnInit, OnDestroy {
   public chartOptions: any = {
     centerText: this.centerText
   };
+  constructor(private chartService: ChartService,
+    private locationService: LocationService,
+    private mapDataService: MapDataService,
+    private hazzardService: HazzardService,
+    private router: Router) { }
+
+  ngOnInit() {
+    combineLatest(
+      this.locationService.getLocation(),
+      this.mapDataService.placesData$
+    ).subscribe(result=>{
+      if(result[1].length === 0) this.router.navigate([""])
+        this.placesType=result[1];
+        this.chartOptions.centerText=" 70 ";
+    })
+  }
+  
   public chartClicked(e:any):void {
     console.log(e);
   }
  
   public chartHovered(e:any):void {
     console.log(e);
-  }
-  constructor(private locationService: LocationService,
-    private mapDataService: MapDataService,
-    private hazzardService: HazzardService,
-    private chartService: ChartService,
-    private router: Router) { }
-
-  ngOnInit() {
-    combineLatest(
-      this.locationService.location$,
-      this.mapDataService.placesData$
-    ).subscribe(result=>{
-      if(!result[0].zoom) this.router.navigate([""])
-      this.placesType=result[1]
-      this.chartOptions.centerText=" 70 ";
-    })
   }
 
   ngOnDestroy() {}

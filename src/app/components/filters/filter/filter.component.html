@@ -1,0 +1,26 @@
+<div class="baseContainer">
+    <div class="heading" fxLayoutGap="10px">
+        <span class="headingText">Let's configure Filters and Risk Scores for </span> 
+        <div class="selectedAddress">
+            <form class="form">
+                <mat-form-field class="full-width" appearance="fill">
+                  <mat-label>Property Address</mat-label>
+                  <input matInput [value]="(locationService.getLocation() | async)?.address">
+                </mat-form-field>
+              </form>
+              <mat-icon class="editLocation" matTooltip="Edit Location" matTooltipPosition="below" (click)="search()">edit</mat-icon>
+        </div>
+        <button mat-raised-button color="primary" (click)="generateReport()" class="generateReport">Generate Report</button>
+    </div>
+    <div class="filters" fxLayoutGap="15px">
+        <mat-card class="filterCard">
+            <span class="filterCardHeading">Sorroundings Data</span>
+            <div class="filterCardContent">
+                <app-search-filters></app-search-filters>
+            </div>
+        </mat-card>
+        <mat-card class="filterCard">
+            <span class="filterCardHeading">Geohazard Data</span>
+        </mat-card>
+    </div>
+</div>

@@ -10,7 +10,13 @@
   <mat-drawer #drawer class="sidenav" [opened]="navVisible" mode="over">
     <app-sinde-nav></app-sinde-nav>
   </mat-drawer>
-
-  <router-outlet></router-outlet>
-
+  <div class="search-container">
+    <div class="actions">
+      <router-outlet></router-outlet>
+    </div>
+    <div class="map" [ngClass]="{'mapVisible': isMapVisible, 'smallMap': isSmallMap}">
+      <app-map></app-map>
+    </div>
+  </div>
+  
 </mat-drawer-container>
