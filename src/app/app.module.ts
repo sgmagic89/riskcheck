@@ -1,3 +1,5 @@
+import { GeoFiltersComponent } from './components/filters/geo-filters/geo-filters.component';
+import { SideNavComponent } from './components/core/side-nav/side-nav.component';
 import { CUSTOM_ELEMENTS_SCHEMA, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { SharedModule } from '../shared/shared.module';
@@ -7,14 +9,13 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MapComponent } from './components/map/map.component';
 import { SearchComponent } from './components/search/search.component';
-import { SindeNavComponent } from './components/core/sinde-nav/sinde-nav.component';
 import { AddFilterComponent } from './components/filters/add-filter/add-filter.component';
 import { ManageFiltersComponent } from './components/filters/manage-filters/manage-filters.component';
 import { SearchFiltersComponent } from './components/filters/search-filters/search-filters.component';
 import { AnalysisComponent } from './components/analysis/analysis.component';
 import { ChartsModule } from 'ng2-charts';
 import { FilterComponent } from './components/filters/filter/filter.component';
-
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
    declarations: [
       AppComponent,
@@ -22,10 +23,11 @@ import { FilterComponent } from './components/filters/filter/filter.component';
       SearchComponent,
       SearchFiltersComponent,
       AddFilterComponent,
-      SindeNavComponent,
+      SideNavComponent,
       ManageFiltersComponent,
       AnalysisComponent,
-      FilterComponent
+      FilterComponent,
+      GeoFiltersComponent
    ],
    imports: [
 	 BrowserModule,
@@ -36,7 +38,8 @@ import { FilterComponent } from './components/filters/filter/filter.component';
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyA8UJo6cf5uBYRL0qMIjZrnqT1IDF_A6Dk',
       libraries: ['places']
-    })
+    }),
+    ToastrModule.forRoot()
 	],
    entryComponents:[AddFilterComponent],
    providers: [],

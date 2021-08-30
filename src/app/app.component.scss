@@ -1,36 +1,40 @@
 .logo {
-        height: 32px;
-        width: 32px;
-        margin: 0px 10px 5px 10px;
+  height: 32px;
+  width: 32px;
+  margin: 0px 10px 5px 10px;
+}
+
+.navigate {
+  cursor: pointer;
 }
 
 .base-container {
-        height: 100%;
-        width: 100%;
-        .sidenav {
-                display: flex;
-                height: 100%;
-                min-width: 250px;
-                background-color: #3F51B5;
-        }
+  height: 100%;
+  width: 100%;
+  .sidenav {
+    display: flex;
+    height: 100%;
+    min-width: 250px;
+    background-color: #3f51b5;
+  }
 }
 
 .search-container {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100%;
-        .actions {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .map {
-            flex: 1;
-        }
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  .actions {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .map {
+    flex: 1;
+  }
 
-        .smallMap {
-                flex: 0.5 !important;  
-        }
-    }
+  .smallMap {
+    flex: 0.5 !important;
+  }
+}

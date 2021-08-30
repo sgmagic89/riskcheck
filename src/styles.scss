@@ -1,4 +1,5 @@
 @import "~@angular/material/prebuilt-themes/indigo-pink.css";
+@import '~ngx-toastr/toastr.css';
 html, body {
   margin: 0; 
   font-family: Roboto, "Helvetica Neue", sans-serif;
@@ -27,3 +28,14 @@ html, body {
   .mat-dialog-container {
     overflow: hidden !important;
   }
+
+  .row {
+    display: flex;
+  }
+
+  .column {
+    display: flex;
+    flex-direction: column;
+  }
+
+  

@@ -6,20 +6,20 @@ import { PlacesService } from 'src/app/services/logicalServices/places.service';
 @Component({
   selector: 'app-add-filter',
   templateUrl: './add-filter.component.html',
-  styleUrls: ['./add-filter.component.scss']
+  styleUrls: ['./add-filter.component.scss'],
 })
-
 export class AddFilterComponent implements OnInit {
-
-  filterForm: FormGroup = <FormGroup>{}; 
-  constructor(private formBuilder: FormBuilder,
+  filterForm: FormGroup = <FormGroup>{};
+  constructor(
+    private formBuilder: FormBuilder,
     private dialogRef: MatDialogRef<AddFilterComponent>,
-    private placesService: PlacesService) { }
+    private placesService: PlacesService
+  ) {}
 
   ngOnInit() {
     this.filterForm = this.formBuilder.group({
       filterName: [null, [Validators.required]],
-      filterKeyword: [null, Validators.required]
+      filterKeyword: [null, Validators.required],
     });
   }
 
@@ -27,7 +27,13 @@ export class AddFilterComponent implements OnInit {
     if (!this.filterForm.valid) {
       return;
     }
-    const placeType = new PlacesType(this.filterForm.value.filterName,true,undefined,this.filterForm.value.filterKeyword,true);
+    const placeType = new PlacesType(
+      this.filterForm.value.filterName,
+      true,
+      undefined,
+      this.filterForm.value.filterKeyword,
+      true
+    );
     this.placesService.addPlaceType(placeType);
     this.dialogRef.close();
   }
@@ -35,5 +41,4 @@ export class AddFilterComponent implements OnInit {
   cancel() {
     this.dialogRef.close();
   }
-
 }

@@ -1,19 +1,25 @@
+import { Ratings } from 'src/app/models/rating.enum';
 export class EarthQuakeParameters {
-    latitude: number = 0;
-    longitude: number = 0; 
-    starttime?: string = '2010-08-01';
-    endtime?: string = '2021-08-13';
-    maxradiuskm?: number = 50;
+  latitude: number = 0;
+  longitude: number = 0;
+  period: number = 10;
+  maxradiuskm?: number = 50;
 }
 
 export class EarthQuakeData {
-    total: number = 0;
-    min?: EarthQuake = {};
-    max?: EarthQuake = {};
-    lastEarthQuake?: EarthQuake;
+  total: number = 0;
+  min?: EarthQuake = {};
+  max?: EarthQuake = {};
+  lastEarthQuake?: EarthQuake;
+  allEarthQuakes?: EarthQuake[];
+  period: number = 10;
+  rating?: Ratings;
 }
 
 export class EarthQuake {
-    mag?: number;
-    time?: Date;
+  mag?: number;
+  time?: Date;
+  latitude?: number;
+  longitude?: number;
+  depth?: number;
 }

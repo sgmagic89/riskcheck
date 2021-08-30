@@ -1,72 +1,210 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { EarthQuakeData } from 'src/app/models/eartQuakeData.model';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ChartType } from 'chart.js';
-import { Color, PluginServiceGlobalRegistrationAndOptions } from 'ng2-charts';
-import { combineLatest } from 'rxjs';
+import { ChartOptions, ChartType, ChartDataSets } from 'chart.js';
+import {
+  Color,
+  Label,
+  SingleDataSet,
+} from 'ng2-charts';
+import { combineLatest, Subscription } from 'rxjs';
 import { PlaceTypeData } from 'src/app/models/placeTypeData.model';
 import { MapDataService } from 'src/app/services/dataServices/mapData.service';
 import { HazzardService } from 'src/app/services/logicalServices/hazzard.service';
 import { LocationService } from 'src/app/services/logicalServices/location.service';
 import { PlacesService } from 'src/app/services/logicalServices/places.service';
-import { ChartService } from '../../services/chartService/chart.service'
-
+import { ChartService } from '../../services/chartService/chart.service';
+import { TableData } from 'src/app/models/tableData.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+// import ChartDataLabels from 'chartjs-plugin-datalabels';
 @Component({
   selector: 'app-analysis',
   templateUrl: './analysis.component.html',
-  styleUrls: ['./analysis.component.scss']
+  styleUrls: ['./analysis.component.scss'],
 })
-export class AnalysisComponent implements OnInit, OnDestroy {
-  placesType : PlaceTypeData[]=[];
+export class AnalysisComponent implements OnInit, AfterViewInit, OnDestroy {
+  placesType: PlaceTypeData[] = [];
+  placeTypeSubscription: Subscription = <Subscription>{};
+  score: number = 0;
   // Doughnut
-  public doughnutChartLabels:string[] = ['Good', 'Moderate', 'Bad'];
-  public colors: Color[] = [
-    {
-      backgroundColor: [
-        'green',
-        'yellow',
-        'red'
-      ]
+  public pieChartOptions: ChartOptions = {
+    responsive: true,
+    tooltips: {
+      callbacks: {
+        label: function(tooltipItem: any, data: any) {
+          return data['labels'][tooltipItem['index']] + ': ' + data['datasets'][0]['data'][tooltipItem['index']] + '%';
+        }
+      }
     }
-  ];
-  public demodoughnutChartData:number[][] = [[30, 50, 20]];
-  public doughnutChartType: ChartType = 'doughnut';
-  public doughnutChartPlugins: PluginServiceGlobalRegistrationAndOptions[] = [{beforeDraw:this.chartService.getPlugunFunction()}];
-  centerText="  0  ";
-  public chartOptions: any = {
-    centerText: this.centerText
   };
-  constructor(private chartService: ChartService,
-    private locationService: LocationService,
+  
+  public pieChartLabels: Label[] = [['Good'], ['Moderate'], 'Bad'];
+  public pieChartData: SingleDataSet = [];
+  public percentages = {};
+  public pieChartType: ChartType = 'pie';
+  public pieChartLegend = false;
+  public pieChartColors: Array < any > = [{
+    backgroundColor: [ 'rgb(186, 245, 97)', 'rgb(252, 208, 127)', 'rgb(241, 128, 128)'],
+    borderColor: ['rgb(186, 245, 97,0.2)', 'rgb(252, 208, 127,0.2)', 'rgb(241, 128, 128, 0.2)']
+  }];
+  public pieChartPlugins = []
+  
+  public categories = ['GOOD', 'MODERATE', 'BAD']
+  public categorized: {
+    GOOD: any[];
+    BAD: any[];
+    MODERATE: any[];
+  } = {
+    GOOD: [],
+    BAD: [],
+    MODERATE: [],
+  };
+
+  // line chart
+  lineChartData: ChartDataSets[] = [
+    { data: [], label: 'Earthquake Magnitude' },
+  ];
+
+  lineChartLabels: Label[] = [];
+
+  lineChartOptions = {
+    responsive: true,
+    legend: {
+      display: false,
+    },
+  };
+
+  lineChartColors: Color[] = [
+    {
+      borderColor: 'black',
+      backgroundColor: 'rgba(255,0,0,0)',
+    },
+  ];
+
+  lineChartLegend = true;
+  lineChartPlugins = [];
+  lineChartType: ChartType = 'line';
+  earthQuakeData: EarthQuakeData = <EarthQuakeData>{};
+  displayedColumns = ['no', 'type', 'name', 'address', 'distance'];
+  dataSource = new MatTableDataSource<TableData>([]);
+  @ViewChild(MatPaginator) paginator: MatPaginator = <MatPaginator>{}
+
+  hazardSubscription: Subscription = <Subscription>{};
+  constructor(
+    private chartService: ChartService,
+    public locationService: LocationService,
     private mapDataService: MapDataService,
     private hazzardService: HazzardService,
     private router: Router,
-    private placesService: PlacesService) { }
+    private placesService: PlacesService
+  ) {
+  }
 
   ngOnInit() {
-    combineLatest([
-      this.locationService.getLocation(),
-      this.mapDataService.placesData$
-    ]
-    ).subscribe(result=>{
-      if(result[1].length === 0) {
-        this.placesService.mapInitialized$.subscribe(initialized => {
-          if(initialized) {
+    this.placeTypeSubscription = 
+      this.mapDataService.placesData$.subscribe((result) => {
+      if (result.length === 0) {
+        this.placesService.mapInitialized$.subscribe((initialized) => {
+          if (initialized) {
             this.placesService.analyseLocation();
           }
         });
       }
-        this.placesType=result[1];
-        this.chartOptions.centerText=" 70 ";
-    })
-  }
-  
-  public chartClicked(e:any):void {
-    console.log(e);
-  }
- 
-  public chartHovered(e:any):void {
-    console.log(e);
+      this.placesType = result;
+      this.prepareTableData(this.placesType);
+      if (this.placesType.length > 0) {
+        this.placesType.forEach((place) => {
+          if (place.rating === 'MODERATE') {
+            this.categorized.MODERATE.push(place);
+          } else if (place.rating === 'BAD') {
+            this.categorized.BAD.push(place);
+          } else if (place.rating === 'GOOD') {
+            this.categorized.GOOD.push(place);
+          }
+        });
+        Object.keys(this.categorized);
+      }
+    });
+    this.hazardSubscription = this.hazzardService.getEarthQuakeData().subscribe((data) => {
+      this.earthQuakeData = data;
+      data.allEarthQuakes?.forEach((data: any) => {
+        this.lineChartData[0].data?.push(data.mag);
+        this.lineChartLabels.push(
+          new Date(data.time).toISOString().slice(0, 10)
+        );
+      });
+      if (data.rating === 'MODERATE') {
+        this.categorized.MODERATE.push(data);
+      } else if (data.rating === 'BAD') {
+        this.categorized.BAD.push(data);
+      } else if (data.rating === 'GOOD') {
+        this.categorized.GOOD.push(data);
+      }
+    });
+    this.calculatePercent();
   }
 
-  ngOnDestroy() {}
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  prepareTableData(placesType: PlaceTypeData[]) {
+    let i = 1;
+    const tableData:TableData[] = []
+    placesType.forEach((place) => {
+      const type = place.placeType.displayName;
+      place.data.forEach(elem => {
+        const data = <TableData>{};
+        data.no = i++;
+        data.type = type;
+        data.name = elem.name;
+        data.address = elem.address;
+        data.distance = elem.distance;
+        tableData.push(data)
+      })
+    });
+    this.dataSource = new MatTableDataSource<TableData>(tableData);
+  }
+
+  calculatePercent() {
+    console.log('categorized data ', this.categorized);
+    const sum = this.categorized.BAD.length + this.categorized.GOOD.length + this.categorized.MODERATE.length;
+    const percents: number[] = [];
+    const goodPercent = this.categorized.GOOD.length > 0 ? parseFloat(((this.categorized.GOOD.length/sum)*100).toFixed(2)) : 0;
+    const moderatePercent = this.categorized.MODERATE.length > 0 ? parseFloat(((this.categorized.MODERATE.length/sum)*100).toFixed(2)) : 0;
+    const badPercent = this.categorized.BAD.length > 0 ? parseFloat(((this.categorized.BAD.length/sum)*100).toFixed(2)) : 0;
+    percents.push(goodPercent);
+    percents.push(moderatePercent);
+    percents.push(badPercent);
+    this.pieChartData = percents;
+    this.score = parseFloat((goodPercent/10).toFixed(2));
+  }
+
+
+
+  unsubscribe(subscription: Subscription) {
+    if (subscription) {
+      subscription.unsubscribe();
+    }
+  }
+
+  goBack() {
+    this.router.navigate(['configure'])
+  }
+
+  search() {
+    this.router.navigate(['search']);
+  }
+
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe(this.placeTypeSubscription);
+    this.unsubscribe(this.hazardSubscription);
+  }
 }

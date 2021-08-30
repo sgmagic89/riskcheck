@@ -1,12 +1,20 @@
-
 <mat-toolbar color="primary">
-  <button mat-icon-button class="icon" (click)="toogleNav()" aria-label="menu-icon">
+  <button
+    mat-icon-button
+    class="icon"
+    (click)="toogleNav()"
+    aria-label="menu-icon"
+  >
     <mat-icon>menu</mat-icon>
   </button>
-  <img (click)="gotoHome()" src="assets/logo.png" class="logo"/>
-  <span (click)="gotoHome()">Risk Check</span>
+  <img (click)="gotoHome()" src="assets/logo.png" class="logo navigate" />
+  <span (click)="gotoHome()" class="navigate">Risk Check</span>
 </mat-toolbar>
-<mat-drawer-container (backdropClick)="closeNav()" class="base-container" autosize >
+<mat-drawer-container
+  (backdropClick)="closeNav()"
+  class="base-container"
+  autosize
+>
   <mat-drawer #drawer class="sidenav" [opened]="navVisible" mode="over">
     <app-sinde-nav></app-sinde-nav>
   </mat-drawer>
@@ -14,9 +22,8 @@
     <div class="actions">
       <router-outlet></router-outlet>
     </div>
-    <div class="map" [ngClass]="{'smallMap': isSmallMap}" *ngIf="isMapVisible">
+    <div class="map" [ngClass]="{ smallMap: isSmallMap }" *ngIf="isMapVisible">
       <app-map></app-map>
     </div>
   </div>
-  
 </mat-drawer-container>

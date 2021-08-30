@@ -1,6 +1,6 @@
 <div class="baseContainer">
     <div class="heading" fxLayoutGap="10px">
-        <span class="headingText">Let's configure Filters and Risk Scores for </span> 
+        <span class="headingText">Let's configure Filters and Ratings for </span> 
         <div class="selectedAddress">
             <form class="form">
                 <mat-form-field class="full-width" appearance="fill">
@@ -14,13 +14,19 @@
     </div>
     <div class="filters" fxLayoutGap="15px">
         <mat-card class="filterCard">
-            <span class="filterCardHeading">Sorroundings Data</span>
+            <div class="filterCardHeading">
+                <span>Surroundings Data</span>
+                <mat-icon class="addFilter" matTooltip="Add Filter" (click)="openAddFilterForm()"  matTooltipPosition="right" color="primary">library_add</mat-icon>
+            </div>
             <div class="filterCardContent">
                 <app-search-filters></app-search-filters>
             </div>
         </mat-card>
         <mat-card class="filterCard">
             <span class="filterCardHeading">Geohazard Data</span>
+            <div class="filterCardContent">
+                <app-geo-filters></app-geo-filters>
+            </div>
         </mat-card>
     </div>
 </div>

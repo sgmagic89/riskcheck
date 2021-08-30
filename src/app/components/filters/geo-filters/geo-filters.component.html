@@ -1,0 +1,40 @@
+<ngx-spinner name="geodataspinner" [fullScreen]="false" type="timer" size="medium"></ngx-spinner>
+<mat-card class="card">
+    <div class="row">
+      <span class="heading">
+        {{hazardService.hazardName}}
+        <!-- <mat-slide-toggle color="primary" [checked]="hazardService.isHazardDataVisible$ | async"
+          (change)="hazardService.toogleHazzardDataVisibility()">
+        </mat-slide-toggle> -->
+      </span>
+    </div>
+    <div class="total">
+      <mat-icon>waves</mat-icon> There were total&nbsp;<span class="result">{{earthQuakeData?.total}}</span>&nbsp; Earth
+      Quakes in last &nbsp;<span class="result">
+        <mat-form-field class="yearsField" appearance="fill">
+          <input matInput type=number [(ngModel)]="earthQuakeParams.period" class="form-control">
+        </mat-form-field>
+        Years
+      </span>
+      <button mat-mini-fab color="primary" matTooltip="Refresh Data" matTooltipPosition="right" (click)="refreshData()" class="refreshData"><mat-icon>refresh</mat-icon></button>
+    </div>
+
+    <div class="distance">
+      <mat-icon>today</mat-icon> Last Earthquake was on &nbsp;<span
+        class="result">{{earthQuakeData?.lastEarthQuake?.time | date}},</span>&nbsp;of Magnitude&nbsp;<span
+        class="result">{{earthQuakeData?.lastEarthQuake?.mag}}</span>
+    </div>
+    <div class="distance">
+      <mat-icon>flash_on</mat-icon> The most powerfull one was of Magnitude: &nbsp;<span
+        class="result">{{earthQuakeData?.max?.mag}}</span>&nbsp;On&nbsp;<span
+        class="result">{{earthQuakeData?.max?.time | date}}</span>
+    </div>
+    <div class="rating">
+      <span class="ratingHeading">How will you rate this? </span>
+      <div class="options" fxLayoutGap="20px">
+        <button mat-raised-button class="good" [ngClass]="{active: isSelected(ratings.GOOD)}" (click)="rate(ratings.GOOD)">Good</button>
+        <button mat-raised-button class="moderate"  [ngClass]="{active: isSelected(ratings.MODERATE)}" (click)="rate(ratings.MODERATE)">Moderate</button>
+        <button mat-raised-button class="bad"  [ngClass]="{active: isSelected(ratings.BAD)}" (click)="rate(ratings.BAD)">Bad</button>
+      </div>
+    </div>
+  </mat-card>

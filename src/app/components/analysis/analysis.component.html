@@ -1,21 +1,180 @@
-<div *ngFor="let place of placesType">
-  <h2>{{place.placeType.displayName}}</h2>
-  <div *ngFor="let data of place.data;  let i='index'">
-    <span *ngIf="i < 2">{{data.name}}</span>
+<div class="baseContainer">
+  <div class="mainHeading">
+    <div class="left" fxLayoutGap="10px">
+      <span class="staticText"> Risk Analysis Report of </span>
+      <span class="address">{{(locationService.getLocation() | async)?.address}}</span>
+      <mat-icon class="editLocation" matTooltip="Edit Location" matTooltipPosition="below" (click)="search()">edit</mat-icon>
+    </div>
+    <div class="right">
+      <button mat-raised-button (click)="goBack()">Back to Configure ></button>
+    </div>
   </div>
-  <span *ngIf="place.data.length > 2">+++view More</span>
+
+  <div class="summaryCards">
+      <div class="filters scards" fxLayoutGap="15px">
+        <ng-container *ngFor="let category of categorized | keyvalue">
+          <mat-card
+            *ngIf="category.value.length > 0"
+            class="filterCard category {{ category.key }}"
+          >
+            <ng-container>
+              <div class="filterCardContent">
+                <span class="title">{{ category.key }}</span>
+                <div class="section">
+                  <div class="sectiona">
+                    <mat-icon *ngIf="category.key === 'GOOD'">sentiment_very_satisfied</mat-icon>
+                    <mat-icon *ngIf="category.key === 'MODERATE'">sentiment_dissatisfied</mat-icon>
+                    <mat-icon *ngIf="category.key === 'BAD'">sentiment_very_dissatisfied</mat-icon>
+
+                    <span>{{category.value.length}}</span>
+                    <span>Reason{{category.value.length>1? 's': ''}}</span>
+                  </div>
+                  <div class="sectionb">
+                    <div
+                    *ngFor="let place of category.value; let i = index"
+                  >
+                    <ng-container *ngIf="!place.max; else earthQuake">
+                      <ul>
+                        Nearest {{ place?.placeType?.displayName | lowercase }} is
+                        {{ place?.data[0]?.distance }} KM
+                      </ul>
+                    </ng-container>
+                    <ng-template #earthQuake>
+                      <ul> Total {{ place?.total }} Earth Quakes in past {{ place?.period }} years</ul>
+                    </ng-template>
+                  </div>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+          </mat-card>
+        </ng-container>
+      </div>
+  </div>
+  <div class="filters" fxLayoutGap="15px">
+    <mat-card class="filterCard chart">
+      <span class="heading">
+        Risk Score
+      </span>
+      <div class="riskscore">
+        <div class="score">
+          <mat-icon style="color: rgb(186, 245, 97);" *ngIf="score > 6">sentiment_very_satisfied</mat-icon>
+          <mat-icon style="color: rgb(252, 208, 127);" *ngIf="score > 3 && score <= 6">sentiment_dissatisfied</mat-icon>
+          <mat-icon style="color: rgb(241, 128, 128);" *ngIf="score <= 3">sentiment_very_dissatisfied</mat-icon>
+          <span>{{score}} / 10</span>
+          <span class="scoreText">Property Risk Score is {{score > 6? 'Good' : (score > 3 && score <= 6)? 'Moderate' : 'Bad'}} because {{((score > 3 && score <= 6) || (score <= 3 ))? 'only' : ''}} {{score*10}}% things are Good about the property location</span>
+        </div>
+        <div class="chart">
+          <canvas baseChart 
+          [data]="pieChartData" 
+          [labels]="pieChartLabels" 
+          [chartType]="pieChartType"
+          [colors]="pieChartColors"
+          [legend]="pieChartLegend"
+          [options]="pieChartOptions"
+          class="chartDiv"
+          >
+        </canvas>
+        </div>
+      </div>
+
+    </mat-card>
+
+    <mat-card class="filterCard chart">
+      <span class="heading">
+        Geo Hazzard - Earthquake Data
+      </span>
+      <div class="earthQuake">
+        <div class="info">
+          <div class="unit">
+            <span class="unitheading">Total</span>
+            <span>{{earthQuakeData?.total}}</span>
+          </div>
+          <div class="unit">
+            <span class="unitheading">Period</span>
+            <span>{{earthQuakeData?.period}} Years</span>
+          </div>
+          <div class="unit">
+            <span class="unitheading">Maximum</span>
+            <span>{{earthQuakeData?.max?.mag}}mag on  {{earthQuakeData?.max?.time | date}}</span>
+          </div>
+          <div class="unit">
+            <span class="unitheading">Minimum</span>
+            <span>{{earthQuakeData?.min?.mag}}mag on {{earthQuakeData?.min?.time | date}}</span>
+          </div>
+          <div class="unit">
+            <span class="unitheading">Last Event</span>
+            <span>{{earthQuakeData?.lastEarthQuake?.mag}}mag on {{earthQuakeData?.lastEarthQuake?.time | date}}</span>
+          </div>
+        </div>
+        <div class="chart">
+          <canvas
+          baseChart
+          [datasets]="lineChartData"
+          [labels]="lineChartLabels"
+          [options]="lineChartOptions"
+          [colors]="lineChartColors"
+          [legend]="lineChartLegend"
+          [chartType]="lineChartType"
+          [plugins]="lineChartPlugins"
+          class="chartDiv"
+        >
+        </canvas>
+        </div>
+      </div>
+
+    </mat-card>
+  </div>
 </div>
 
-  <app-chart></app-chart>
-<!-- 
-<div style="display: block; width:700px; height:700px;">
- </div> -->
 
- <canvas baseChart [plugins]="doughnutChartPlugins"
-              [data]="demodoughnutChartData"
-              [colors] ="colors"
-              [options]="chartOptions"
-              [labels]="doughnutChartLabels"
-              [chartType]="doughnutChartType"
-              (chartHover)="chartHovered($event)"
-              (chartClick)="chartClicked($event)"></canvas>
+
+<div class="baseContainer tableContainer">
+  <mat-card class="sorrundingplaces">
+    <span class="heading">
+      All Surrounding Places
+    </span>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($any($event.target).value)" placeholder="Search">
+    </mat-form-field>
+    <mat-table #table [dataSource]="dataSource">
+      <!-- Position Column -->
+      <ng-container matColumnDef="no">
+        <mat-header-cell *matHeaderCellDef> Sr. No. </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.no}} </mat-cell>
+      </ng-container>
+  
+      <!-- Type Column -->
+      <ng-container matColumnDef="type">
+        <mat-header-cell *matHeaderCellDef> Place Type </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+      </ng-container>
+  
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <mat-header-cell *matHeaderCellDef> Place Name </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+      </ng-container>
+  
+      <!-- Address Column -->
+      <ng-container matColumnDef="address">
+        <mat-header-cell *matHeaderCellDef> Address </mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.address}} </mat-cell>
+      </ng-container>
+  
+      <!-- Distance Column -->
+      <ng-container matColumnDef="distance">
+        <mat-header-cell *matHeaderCellDef>Distance(in km)</mat-header-cell>
+        <mat-cell *matCellDef="let element"> {{element.distance}} </mat-cell>
+      </ng-container>
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator
+    [pageSize]="10"
+    [pageSizeOptions]="[5, 10, 20]"
+    [showFirstLastButtons]="true">
+</mat-paginator>
+  </mat-card>
+    
+</div>

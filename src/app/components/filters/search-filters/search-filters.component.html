@@ -1,13 +1,34 @@
-<div class="placesTypes">
+<div class="placesTypes" fxLayoutGap="15px">
   <ng-container *ngFor="let type of placesService.getPlaceTypes() | async">
-    <div class="place">
-      <mat-slide-toggle
-      color="primary"
-      [checked]="type.isVisible"
-      (change)="tooglePlaceType($event,type)">
-      {{type.displayName}}
-      </mat-slide-toggle>
-    </div>
+      <mat-card class="card">
+        <div class="row">
+          <span class="heading">
+            {{type.displayName}}
+            <mat-slide-toggle
+            color="primary"
+            [checked]="type.isVisible"
+            (change)="tooglePlaceType($event,type)">
+            </mat-slide-toggle>
+          </span>
+          <div class="filterActions">
+            <mat-icon class="delete" matTooltip="Delete Filter" *ngIf="type.canDelete" matTooltipPosition="right" (click)="placesService.deletePlaceType(type)">delete_forever</mat-icon>
+          </div>
+        </div>
+        <div class="total" *ngIf="type.isVisible">
+          <mat-icon>pin_drop</mat-icon> Total {{type.displayName}}s nearby:&nbsp;<span class="result">{{getTotal(type)}}</span>
+        </div>
+        <div class="distance" *ngIf="type.isVisible">
+          <mat-icon>near_me</mat-icon> Nearest {{type.displayName}} is in&nbsp;<span class="result">{{getNearest(type)}} km</span>
+        </div>
+        <div class="rating" *ngIf="type.isVisible">
+          <span class="ratingHeading">How will you rate this? </span>
+          <div class="options" fxLayoutGap="10px">
+            <button mat-raised-button class="good" [ngClass]="{active: isSelected(ratings.GOOD, type)}" (click)="rate(ratings.GOOD, type)">Good</button>
+            <button mat-raised-button class="moderate"  [ngClass]="{active: isSelected(ratings.MODERATE, type)}" (click)="rate(ratings.MODERATE, type)">Moderate</button>
+            <button mat-raised-button class="bad"  [ngClass]="{active: isSelected(ratings.BAD, type)}" (click)="rate(ratings.BAD, type)">Bad</button>
+          </div>
+        </div>
+      </mat-card>
+
   </ng-container>
-  <mat-icon class="addFilter" matTooltip="Add Filter" (click)="openAddFilterForm()"  matTooltipPosition="right" color="primary">library_add</mat-icon>
 </div>
